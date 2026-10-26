@@ -23,5 +23,7 @@ Scope {
         anchors.centerIn: parent
       }
     }
+
+    WorkspaceWidget {}
   }
 }

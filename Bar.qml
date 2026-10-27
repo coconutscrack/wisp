@@ -18,12 +18,12 @@ Scope {
       }
 
       implicitHeight: 30
+      WorkspaceWidget {}
 
       ClockWidget {
         anchors.centerIn: parent
       }
     }
 
-    WorkspaceWidget {}
   }
 }

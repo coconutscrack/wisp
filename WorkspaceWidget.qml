@@ -32,7 +32,7 @@ Scope {
 
       Rectangle {
         id: shell
-        color: "#F2F0EB"
+        color: "#F0EFED"
         opacity: 1
         implicitWidth: workspaceContainer.width + 20
         implicitHeight: workspaceContainer.height + 20
@@ -45,32 +45,30 @@ Scope {
         id: workspaceContainer
         anchors.centerIn: parent
 
-
         Repeater {
-          // model: Hyprland.workspaces.values.filter(w => !w.name.startsWith("special:"))
           model: 10
           Rectangle {
             required property var modelData
             property int wsId: modelData + 1
-            // property var workspace = Hyprland.workspaces.values[modelData]
+            property int isFocused: {
+              if (Hyprland.focusedWorkspace == null) return false
+              return (Hyprland.focusedWorkspace.id === wsId) ? true : false
+            }
 
             id: ws
             implicitWidth: 30
             implicitHeight: 30
 
-            property real tmpHeight
             states: [
               State {
                 name: "UNFOCUSED"
-                when: !(wsId === Hyprland.focusedWorkspace.id)
-                PropertyChanges { ws.tmpHeight: 40 }
+                when: !isFocused
                 PropertyChanges { ws.color: "transparent" }
               },
               State {
                 name: "FOCUSED"
-                when: modelData.focused
-                PropertyChanges { ws.tmpHeight: 60 }
-                PropertyChanges { ws.color: "#F2F0EB" }
+                when: isFocused
+                PropertyChanges { ws.color: "#D1CCC2" }
               }
             ]
 
@@ -82,7 +80,7 @@ Scope {
 
             Text {
               anchors.centerIn: parent
-              color: "#393934"
+              color: isFocused ? "#F2F0EB" : "#393934"
               text: wsId
             }
 

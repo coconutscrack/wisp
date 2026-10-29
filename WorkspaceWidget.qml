@@ -15,10 +15,18 @@ Scope {
       required property var modelData
       screen: modelData
 
+      visible: false
+      
       WlrLayershell.layer: WlrLayer.Top
       WlrLayershell.namespace: "qs"
 
-      BackgroundEffect.blurRegion: Region { item: root.contentItem }
+      BackgroundEffect.blurRegion: Region { 
+        radius: shell.radius
+        height: shell.height - shell.border.width * 2
+        width: shell.width - shell.border.width * 2
+        x: shell.border.width
+        y: shell.border.width
+      }
 
       anchors { bottom: true }
       implicitWidth: shell.width
@@ -26,19 +34,40 @@ Scope {
       exclusiveZone: 0
       aboveWindows: true
       margins {
-        left: shell.width
+        bottom: shell.height / 2
       }
+
       color: "transparent"
+
+      Connections {
+        target: Hyprland
+        function onFocusedWorkspaceChanged() {
+          root.visible = true
+          makeInvisible.restart()
+        }
+      }
+
+      Timer {
+        id: makeInvisible
+
+        interval: 2000
+        running: true
+        repeat: false
+        onTriggered: {
+          root.visible = false
+        }
+      }
 
       Rectangle {
         id: shell
+
         color: "#F0EFED"
-        opacity: 1
-        implicitWidth: workspaceContainer.width + 20
-        implicitHeight: workspaceContainer.height + 20
-        border.color: "#33000000"
-        border.width: 2
-        radius: 100
+        opacity: 0.8
+        implicitWidth: workspaceContainer.width + workspaceContainer.height / 1.5
+        implicitHeight: workspaceContainer.height + workspaceContainer.height / 1.5
+        border.color: "#FFBEB8AF"
+        border.width: 1
+        radius: height / 2
       }
 
       RowLayout {
@@ -50,13 +79,13 @@ Scope {
           Rectangle {
             required property var modelData
             property int wsId: modelData + 1
-            property int isFocused: {
+            property bool isFocused: {
               if (Hyprland.focusedWorkspace == null) return false
-              return (Hyprland.focusedWorkspace.id === wsId) ? true : false
+              return Hyprland.focusedWorkspace.id === wsId
             }
 
             id: ws
-            implicitWidth: 30
+            implicitWidth: 35
             implicitHeight: 30
 
             states: [
@@ -68,7 +97,7 @@ Scope {
               State {
                 name: "FOCUSED"
                 when: isFocused
-                PropertyChanges { ws.color: "#D1CCC2" }
+                PropertyChanges { ws.color: "#9C8A84" }
               }
             ]
 
@@ -85,7 +114,8 @@ Scope {
             }
 
             color: "black"
-            radius: 100
+            opacity: 0.8
+            radius: height / 2
           }
         }
       }

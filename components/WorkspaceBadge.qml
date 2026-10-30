@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
+import qs.config
 
 Rectangle {
   property string specialName
@@ -19,16 +20,16 @@ Rectangle {
     text: specialName || wsName
 
     anchors.centerIn: parent
-    color: "#393934"
+    color: Colors.text
     font.bold: false
   }
 
-  Behavior on nameText.implicitWidth {
-    NumberAnimation { duration: 200 }
-  }
+  // Behavior on nameText.implicitWidth {
+  //   NumberAnimation { duration: 200 }
+  // }
 
-  border.color: "#BEB8AF"
+  border.color: Colors.border
   border.width: 1
-  color: "#BFF0EFED"
+  color: Qt.alpha(Colors.background, Colors.alpha)
   radius: height / 2
 }

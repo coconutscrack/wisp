@@ -3,6 +3,6 @@ import Quickshell
 import qs.surfaces
 
 Scope {
-  // Bar {}
+  FrameWrapper {}
   WorkspaceIndicator {}
 }

@@ -20,7 +20,7 @@ PanelWindow {
     anchors.fill: parent
     ShapePath {
       id: frame
-      fillColor: Qt.rgba(Colors.background.r, Colors.background.g, Colors.background.b, Colors.alpha)
+      fillColor: Qt.alpha(Colors.background, Colors.alpha)
       strokeWidth: -1
 
       property real innerBottomFrame: root.height - Sizes.frameThickness
@@ -69,25 +69,6 @@ PanelWindow {
       }
 
       // Bottom Bump
-      // PathArc {
-      //   x: frame.frameCenterX + 25
-      //   y: frame.innerBottomFrame - 3
-      //   radiusX: 100
-      //   radiusY: 100
-      // }
-
-      // PathLine {
-      //   x: frame.frameCenterX + 20
-      //   y: frame.innerBottomFrame - 6
-      // }
-
-      // PathArc {
-      //   x: frame.frameCenterX + 15
-      //   y: frame.innerBottomFrame - 9
-      //   radiusX: Sizes.frameRadius
-      //   radiusY: Sizes.frameRadius
-      //   direction: PathArc.Counterclockwise
-      // }
       PathCubic {
         x: frame.frameCenterX + (frame.neutralBumpPlateauWidth / 2); 
         y: frame.innerBottomFrame - frame.neutralBumpHeight
@@ -107,28 +88,8 @@ PanelWindow {
         control1X: frame.frameCenterX - (frame.neutralBumpPlateauWidth / 2) - frame.bezierSoftness; control1Y: frame.innerBottomFrame - frame.neutralBumpHeight
         control2X: frame.frameCenterX - (frame.neutralBumpBaseWidth / 2) + frame.bezierSoftness; control2Y: frame.innerBottomFrame
       }
-
-      // PathArc {
-      //   x: frame.frameCenterX - 25
-      //   y: frame.innerBottomFrame - 3
-      //   radiusX: Sizes.frameRadius
-      //   radiusY: Sizes.frameRadius
-      //   direction: PathArc.Counterclockwise
-      // }
-
-      // PathLine {
-      //   x: frame.frameCenterX - 25
-      //   y: frame.innerBottomFrame - 3
-      // }
-
-      // PathArc {
-      //   x: frame.frameCenterX - 35
-      //   y: frame.innerBottomFrame
-      //   radiusX: 100
-      //   radiusY: 100
-      // }
-
       //
+
       PathLine { 
         x: frame.innerLeftFrame + Sizes.frameRadius
         y: frame.innerBottomFrame

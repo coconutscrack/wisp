@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import QtQuick.Shapes
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import qs.config
 
 PanelWindow {
@@ -37,70 +38,6 @@ PanelWindow {
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
 
-  Item {
-    id: bottomPanel
-    property bool open: false
-
-    x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame - frame.bumpHeight
-    width: frame.bumpBaseWidth; 
-    height: root.height - bottomPanel.y
-
-    states: [
-      // State {
-      //   name: "neutral"
-      //   when: !mouse.hovered
-      //   PropertyChanges { 
-      //     target: frame; 
-      //     bumpHeight: 9
-      //     bumpBaseWidth: 70
-      //     bumpPlateauWidth: 30
-      //   }
-      //   PropertyChanges { bottomPanel.open: false }
-      // },
-      State {
-        name: "hovered"
-        when: !bottomPanel.open && mouse.hovered
-        PropertyChanges { 
-          target: frame; 
-          bumpHeight: 12
-          bumpBaseWidth: 80
-          bumpPlateauWidth: 40
-        }
-      },
-      State {
-        name: "open"
-        when: bottomPanel.open
-        PropertyChanges { 
-          target: frame; 
-          bumpHeight: 30
-          bumpBaseWidth:  150
-          bumpPlateauWidth: 100
-          bezierSoftness: 15
-        }
-      }
-    ]
-
-    transitions: Transition {
-      NumberAnimation { 
-        properties: "bumpHeight, bumpBaseWidth, bumpPlateauWidth, bezierSoftness"; 
-        easing.type: Easing.InOutQuad
-        duration: 150
-      }
-    }
-
-    TapHandler {
-      onTapped: (eventPoint, button) => bottomPanel.open = true
-    }
-
-    HoverHandler {
-      id: mouse
-      acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-      cursorShape: Qt.PointingHandCursor
-      onHoveredChanged: {
-        if (!mouse.hovered) bottomPanel.open = false
-      }
-    }
-  }
 
   Shape {
     anchors.fill: parent
@@ -203,6 +140,104 @@ PanelWindow {
       PathRectangle {
         width: root.width
         height: root.height
+      }
+    }
+  }
+  Item {
+    id: bottomPanel
+    property bool open: false
+
+    x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame - frame.bumpHeight
+    width: frame.bumpBaseWidth; 
+    height: root.height - bottomPanel.y
+
+    states: [
+      State {
+        name: "hovered"
+        when: !bottomPanel.open && mouse.hovered
+        PropertyChanges { 
+          target: frame; 
+          bumpHeight: 12
+          bumpBaseWidth: 80
+          bumpPlateauWidth: 40
+        }
+      },
+      State {
+        name: "open"
+        when: bottomPanel.open
+        PropertyChanges { 
+          target: frame; 
+          bumpHeight: 30
+          bumpBaseWidth:  150
+          bumpPlateauWidth: 100
+        }
+      }
+    ]
+
+    transitions: Transition {
+      NumberAnimation { 
+        properties: "bumpHeight, bumpBaseWidth, bumpPlateauWidth, bezierSoftness"; 
+        easing.type: Easing.InOutQuad
+        duration: 150
+      }
+    }
+
+    TapHandler {
+      onTapped: (eventPoint, button) => bottomPanel.open = true
+    }
+
+    HoverHandler {
+      id: mouse
+      acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+      cursorShape: Qt.PointingHandCursor
+      onHoveredChanged: {
+        if (!mouse.hovered) bottomPanel.open = false
+      }
+    }
+
+    Item {
+      id: workspaceIndicator
+      anchors { top: parent.top; bottom: parent.bottom }
+      anchors.horizontalCenter: parent.horizontalCenter
+      property real cellOffset: Hyprland.focusedWorkspace.id - 1
+      width: frame.bumpPlateauWidth
+      opacity: bottomPanel.open ? 1 : 0
+      // visible: bottomPanel.open
+      clip: true
+
+      Behavior on cellOffset {
+        NumberAnimation { 
+          easing.type: Easing.InOutQuad
+          duration: 150
+        }
+      }
+
+      Behavior on opacity {
+        NumberAnimation { 
+          easing.type: Easing.InOutQuad
+          duration: 150
+        }
+      }
+
+      Row {
+        anchors.verticalCenter: parent.verticalCenter
+        x: (frame.bumpPlateauWidth / 2) - ((100 / 5) / 2) - (workspaceIndicator.cellOffset * 100 / 5)
+
+        Repeater {
+          model: 10
+          Item {
+            required property var modelData
+            id: wsIdContainer
+            implicitWidth: 100 / 5
+            implicitHeight: 30
+            Text {
+              anchors.centerIn: parent
+              text: wsIdContainer.modelData + 1
+              color: Colors.text
+            }
+          }
+        }
+
       }
     }
   }

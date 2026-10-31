@@ -5,11 +5,7 @@ import qs.services
 
 Item {
   id: root
-  // anchors { top: parent.top; bottom: parent.bottom }
-  // anchors.horizontalCenter: parent.horizontalCenter
   property real cellOffset: FocusedWorkspace.wsId - 1
-  // width: frame.bumpPlateauWidth
-  // opacity: bottomPanel.open ? 1 : 0
   clip: true
 
   Behavior on cellOffset {
@@ -18,13 +14,6 @@ Item {
       duration: Config.anims.workspaceIndicatorDuration
     }
   }
-
-  // Behavior on opacity {
-  //   NumberAnimation { 
-  //     easing.type: Config.anims.fadeCurve
-  //     duration: Config.anims.fadeDuration
-  //   }
-  // }
 
   Row {
     anchors.verticalCenter: parent.verticalCenter

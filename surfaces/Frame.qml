@@ -39,35 +39,66 @@ PanelWindow {
 
   Item {
     id: bottomPanel
+    property bool open: false
+
     x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame - frame.bumpHeight
     width: frame.bumpBaseWidth; 
     height: root.height - bottomPanel.y
 
     states: [
+      // State {
+      //   name: "neutral"
+      //   when: !mouse.hovered
+      //   PropertyChanges { 
+      //     target: frame; 
+      //     bumpHeight: 9
+      //     bumpBaseWidth: 70
+      //     bumpPlateauWidth: 30
+      //   }
+      //   PropertyChanges { bottomPanel.open: false }
+      // },
       State {
         name: "hovered"
-        when: mouse.hovered
+        when: !bottomPanel.open && mouse.hovered
         PropertyChanges { 
           target: frame; 
           bumpHeight: 12
           bumpBaseWidth: 80
           bumpPlateauWidth: 40
         }
+      },
+      State {
+        name: "open"
+        when: bottomPanel.open
+        PropertyChanges { 
+          target: frame; 
+          bumpHeight: 30
+          bumpBaseWidth:  150
+          bumpPlateauWidth: 100
+          bezierSoftness: 15
+        }
       }
     ]
 
     transitions: Transition {
       NumberAnimation { 
-        properties: "bumpHeight, bumpBaseWidth, bumpPlateauWidth"; 
+        properties: "bumpHeight, bumpBaseWidth, bumpPlateauWidth, bezierSoftness"; 
         easing.type: Easing.InOutQuad
         duration: 150
       }
+    }
+
+    TapHandler {
+      onTapped: (eventPoint, button) => bottomPanel.open = true
     }
 
     HoverHandler {
       id: mouse
       acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
       cursorShape: Qt.PointingHandCursor
+      onHoveredChanged: {
+        if (!mouse.hovered) bottomPanel.open = false
+      }
     }
   }
 

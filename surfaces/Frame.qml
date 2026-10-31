@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import QtQuick.Shapes
+import Quickshell.Wayland
 import qs.config
 
 PanelWindow {
@@ -12,9 +13,52 @@ PanelWindow {
     left: true
     right: true
   }
-  mask: Region {}
+
+  mask: Region { 
+    Region {
+      item: bottomPanel 
+    }
+  }
+
+  BackgroundEffect.blurRegion: Region { 
+    width: root.width
+    height: root.height
+    Region {
+      x: frame.innerLeftFrame - 1; y: frame.innerTopFrame - 1;
+      width: root.width - (Sizes.frameThickness * 2) + 2; height: root.height - (Sizes.frameThickness * 2) + 2;
+      intersection: Intersection.Subtract
+      radius: Sizes.frameRadius
+    }
+  }
+
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
+
+  Item {
+    id: bottomPanel
+    x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame - frame.bumpHeight
+    width: frame.bumpBaseWidth; 
+    height: root.height - bottomPanel.y
+
+    states: [
+      State {
+        name: "hovered"
+        when: mouse.hovered
+        PropertyChanges { target: frame; bumpHeight: 10 }
+        PropertyChanges { target: frame; bumpBaseWidth: 75 }
+      }
+    ]
+
+    transitions: Transition {
+        NumberAnimation { properties: "bumpHeight, bumpBaseWidth"; easing.type: Easing.InOutQuad }
+    }
+
+    HoverHandler {
+      id: mouse
+      acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+      cursorShape: Qt.PointingHandCursor
+    }
+  }
 
   Shape {
     anchors.fill: parent
@@ -31,9 +75,9 @@ PanelWindow {
       property real frameCenterX: root.width / 2
       property real frameCenterY: root.height / 2
 
-      property real neutralBumpBaseWidth: 100
-      property real neutralBumpPlateauWidth: 70
-      property real neutralBumpHeight: 6
+      property real bumpBaseWidth: 70
+      property real bumpPlateauWidth: 30
+      property real bumpHeight: 9
       property real bezierSoftness: 15
 
       startX: frame.innerLeftFrame + Sizes.frameRadius
@@ -64,29 +108,29 @@ PanelWindow {
       }
 
       PathLine {
-        x: frame.frameCenterX + frame.neutralBumpBaseWidth / 2
+        x: frame.frameCenterX + frame.bumpBaseWidth / 2
         y: frame.innerBottomFrame
       }
 
       // Bottom Bump
       PathCubic {
-        x: frame.frameCenterX + (frame.neutralBumpPlateauWidth / 2); 
-        y: frame.innerBottomFrame - frame.neutralBumpHeight
-        control1X: frame.frameCenterX + (frame.neutralBumpBaseWidth / 2) - frame.bezierSoftness; 
+        x: frame.frameCenterX + (frame.bumpPlateauWidth / 2); 
+        y: frame.innerBottomFrame - frame.bumpHeight
+        control1X: frame.frameCenterX + (frame.bumpBaseWidth / 2) - frame.bezierSoftness; 
         control1Y: frame.innerBottomFrame
-        control2X: frame.frameCenterX + (frame.neutralBumpPlateauWidth / 2) + frame.bezierSoftness; 
-        control2Y: frame.innerBottomFrame - frame.neutralBumpHeight
+        control2X: frame.frameCenterX + (frame.bumpPlateauWidth / 2) + frame.bezierSoftness; 
+        control2Y: frame.innerBottomFrame - frame.bumpHeight
       }
 
       PathLine {
-        x: frame.frameCenterX - (frame.neutralBumpPlateauWidth / 2)
-        y: frame.innerBottomFrame - frame.neutralBumpHeight
+        x: frame.frameCenterX - (frame.bumpPlateauWidth / 2)
+        y: frame.innerBottomFrame - frame.bumpHeight
       }
 
       PathCubic {
-        x: frame.frameCenterX - (frame.neutralBumpBaseWidth / 2); y: frame.innerBottomFrame
-        control1X: frame.frameCenterX - (frame.neutralBumpPlateauWidth / 2) - frame.bezierSoftness; control1Y: frame.innerBottomFrame - frame.neutralBumpHeight
-        control2X: frame.frameCenterX - (frame.neutralBumpBaseWidth / 2) + frame.bezierSoftness; control2Y: frame.innerBottomFrame
+        x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame
+        control1X: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - frame.bezierSoftness; control1Y: frame.innerBottomFrame - frame.bumpHeight
+        control2X: frame.frameCenterX - (frame.bumpBaseWidth / 2) + frame.bezierSoftness; control2Y: frame.innerBottomFrame
       }
       //
 
@@ -118,7 +162,6 @@ PanelWindow {
         width: root.width
         height: root.height
       }
-
     }
   }
 }

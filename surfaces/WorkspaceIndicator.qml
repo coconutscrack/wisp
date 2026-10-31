@@ -17,7 +17,7 @@ Variants {
     visible: false
 
     WlrLayershell.layer: WlrLayer.Top
-    WlrLayershell.namespace: "wisp-pop-in"
+    WlrLayershell.namespace: "qs"
 
     BackgroundEffect.blurRegion: Region { 
       radius: badge.radius

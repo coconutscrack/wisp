@@ -8,13 +8,6 @@ Item {
   property real cellOffset: FocusedWorkspace.wsId - 1
   clip: true
 
-  Behavior on cellOffset {
-    NumberAnimation { 
-      easing.type: Config.anims.workspaceIndicatorCurve
-      duration: Config.anims.workspaceIndicatorDuration
-    }
-  }
-
   Row {
     anchors.verticalCenter: parent.verticalCenter
     x: (root.width / 2) - (Config.workspaces.slotWidth / 2) - (root.cellOffset * Config.workspaces.slotWidth)

@@ -5,7 +5,7 @@ import QtQuick
 
 Singleton {
   // property color background: "#F5EFE4"
-  property color background: "#000000"
+  property color background: "#0D0D0D"
   property color surface:    "#EADFCC"
   property color border:     "#D3C3AA"
   property color textMuted:  "#8F7D69"
@@ -14,5 +14,6 @@ Singleton {
   property color success:    "#8DA287"
   property color warning:    "#C9A15B"
   property color critical:   "#BF6F5E"
-  property real  alpha:      0.75
+  // property real  alpha:      0.75
+  property real  alpha:      1
 }

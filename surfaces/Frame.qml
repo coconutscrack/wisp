@@ -171,6 +171,22 @@ PanelWindow {
       }
     }
 
+    Connections {
+      target: FocusedWorkspace
+      function onWsIdChanged() { 
+        bottomPanel.open = true
+        closePanelTimer.restart()
+      }
+    }
+
+    Timer {
+      id: closePanelTimer
+      interval: 2000
+      running: false
+      repeat: false
+      onTriggered: bottomPanel.open = false
+    }
+
     TapHandler {
       onTapped: (eventPoint, button) => bottomPanel.open = true
     }
@@ -195,6 +211,15 @@ PanelWindow {
         NumberAnimation { 
           easing.type: Config.anims.fadeCurve
           duration: Config.anims.fadeDuration
+        }
+      }
+      Behavior on cellOffset {
+        SequentialAnimation {
+          PauseAnimation { duration: Config.anims.framePanelDuration * (1 - (frame.bumpHeight) / Config.workspaces.slotHeight) }
+          NumberAnimation { 
+            easing.type: Config.anims.workspaceIndicatorCurve
+            duration: Config.anims.workspaceIndicatorDuration
+          }
         }
       }
     }

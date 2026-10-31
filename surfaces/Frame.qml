@@ -20,16 +20,19 @@ PanelWindow {
     }
   }
 
-  BackgroundEffect.blurRegion: Region { 
-    width: root.width
-    height: root.height
-    Region {
-      x: frame.innerLeftFrame - 1; y: frame.innerTopFrame - 1;
-      width: root.width - (Sizes.frameThickness * 2) + 2; height: root.height - (Sizes.frameThickness * 2) + 2;
-      intersection: Intersection.Subtract
-      radius: Sizes.frameRadius
-    }
-  }
+  WlrLayershell.layer: WlrLayer.Top
+  WlrLayershell.namespace: "qs"
+
+  // BackgroundEffect.blurRegion: Region { 
+  //   width: root.width
+  //   height: root.height
+  //   Region {
+  //     x: frame.innerLeftFrame - 1; y: frame.innerTopFrame - 1;
+  //     width: root.width - (Sizes.frameThickness * 2) + 2; height: root.height - (Sizes.frameThickness * 2) + 2;
+  //     intersection: Intersection.Subtract
+  //     radius: Sizes.frameRadius
+  //   }
+  // }
 
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
@@ -44,13 +47,21 @@ PanelWindow {
       State {
         name: "hovered"
         when: mouse.hovered
-        PropertyChanges { target: frame; bumpHeight: 10 }
-        PropertyChanges { target: frame; bumpBaseWidth: 75 }
+        PropertyChanges { 
+          target: frame; 
+          bumpHeight: 12
+          bumpBaseWidth: 80
+          bumpPlateauWidth: 40
+        }
       }
     ]
 
     transitions: Transition {
-        NumberAnimation { properties: "bumpHeight, bumpBaseWidth"; easing.type: Easing.InOutQuad }
+      NumberAnimation { 
+        properties: "bumpHeight, bumpBaseWidth, bumpPlateauWidth"; 
+        easing.type: Easing.InOutQuad
+        duration: 150
+      }
     }
 
     HoverHandler {

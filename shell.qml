@@ -4,5 +4,5 @@ import qs.surfaces
 
 Scope {
   FrameWrapper {}
-  WorkspaceIndicator {}
+  // WorkspaceIndicator {}
 }

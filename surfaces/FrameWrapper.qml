@@ -27,6 +27,7 @@ Scope {
         screen: modelData
         direction: "right"
       }
+
       Frame {
         screen: modelData
       }

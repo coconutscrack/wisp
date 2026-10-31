@@ -4,6 +4,8 @@ import QtQuick.Shapes
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import qs.config
+import qs.components
+import qs.services
 
 PanelWindow {
   id: root
@@ -24,20 +26,8 @@ PanelWindow {
   WlrLayershell.layer: WlrLayer.Top
   WlrLayershell.namespace: "qs"
 
-  // BackgroundEffect.blurRegion: Region { 
-  //   width: root.width
-  //   height: root.height
-  //   Region {
-  //     x: frame.innerLeftFrame - 1; y: frame.innerTopFrame - 1;
-  //     width: root.width - (Sizes.frameThickness * 2) + 2; height: root.height - (Sizes.frameThickness * 2) + 2;
-  //     intersection: Intersection.Subtract
-  //     radius: Sizes.frameRadius
-  //   }
-  // }
-
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
-
 
   Shape {
     anchors.fill: parent
@@ -46,44 +36,44 @@ PanelWindow {
       fillColor: Qt.alpha(Colors.background, Colors.alpha)
       strokeWidth: -1
 
-      property real innerBottomFrame: root.height - Sizes.frameThickness
-      property real innerRightFrame: root.width - Sizes.frameThickness
-      property real innerLeftFrame: Sizes.frameThickness
-      property real innerTopFrame: Sizes.frameThickness
+      property real innerBottomFrame: root.height - Config.frame.thickness
+      property real innerRightFrame: root.width - Config.frame.thickness
+      property real innerLeftFrame: Config.frame.thickness
+      property real innerTopFrame: Config.frame.thickness
 
       property real frameCenterX: root.width / 2
       property real frameCenterY: root.height / 2
 
-      property real bumpBaseWidth: 70
-      property real bumpPlateauWidth: 30
-      property real bumpHeight: 9
-      property real bezierSoftness: 15
+      property real bumpBaseWidth: bumpPlateauWidth + (Config.bottomPanel.travel * 2)
+      property real bumpPlateauWidth: Config.bottomPanel.neutralWidth
+      property real bumpHeight: Config.bottomPanel.neutralHeight
+      property real bezierSoftness: Config.bottomPanel.curveSoftness
 
-      startX: frame.innerLeftFrame + Sizes.frameRadius
+      startX: frame.innerLeftFrame + Config.frame.radius
       startY: frame.innerTopFrame
 
       PathLine { 
-        x: frame.innerRightFrame - Sizes.frameRadius
+        x: frame.innerRightFrame - Config.frame.radius
         y: frame. innerTopFrame
       }
 
       PathArc {
         x: frame.innerRightFrame
-        y: frame.innerTopFrame + Sizes.frameRadius
-        radiusX: Sizes.frameRadius
-        radiusY: Sizes.frameRadius
+        y: frame.innerTopFrame + Config.frame.radius
+        radiusX: Config.frame.radius
+        radiusY: Config.frame.radius
       }
 
       PathLine { 
         x: frame.innerRightFrame
-        y: frame.innerBottomFrame - Sizes.frameRadius
+        y: frame.innerBottomFrame - Config.frame.radius
       }
 
       PathArc {
-        x: frame.innerRightFrame - Sizes.frameRadius
+        x: frame.innerRightFrame - Config.frame.radius
         y: frame.innerBottomFrame
-        radiusX: Sizes.frameRadius
-        radiusY: Sizes.frameRadius
+        radiusX: Config.frame.radius
+        radiusY: Config.frame.radius
       }
 
       PathLine {
@@ -114,27 +104,27 @@ PanelWindow {
       //
 
       PathLine { 
-        x: frame.innerLeftFrame + Sizes.frameRadius
+        x: frame.innerLeftFrame + Config.frame.radius
         y: frame.innerBottomFrame
       }
 
       PathArc {
         x: frame.innerLeftFrame
-        y: frame.innerBottomFrame - Sizes.frameRadius
-        radiusX: Sizes.frameRadius
-        radiusY: Sizes.frameRadius
+        y: frame.innerBottomFrame - Config.frame.radius
+        radiusX: Config.frame.radius
+        radiusY: Config.frame.radius
       }
 
       PathLine { 
         x: frame.innerLeftFrame
-        y: frame.innerTopFrame + Sizes.frameRadius
+        y: frame.innerTopFrame + Config.frame.radius
       }
 
       PathArc {
-        x: frame.innerLeftFrame + Sizes.frameRadius
+        x: frame.innerLeftFrame + Config.frame.radius
         y: frame.innerTopFrame 
-        radiusX: Sizes.frameRadius
-        radiusY: Sizes.frameRadius
+        radiusX: Config.frame.radius
+        radiusY: Config.frame.radius
       }
 
       PathRectangle {
@@ -143,6 +133,7 @@ PanelWindow {
       }
     }
   }
+
   Item {
     id: bottomPanel
     property bool open: false
@@ -157,9 +148,8 @@ PanelWindow {
         when: !bottomPanel.open && mouse.hovered
         PropertyChanges { 
           target: frame; 
-          bumpHeight: 12
-          bumpBaseWidth: 80
-          bumpPlateauWidth: 40
+          bumpHeight: Config.bottomPanel.hoveredHeight
+          bumpPlateauWidth: Config.bottomPanel.hoveredWidth
         }
       },
       State {
@@ -167,18 +157,17 @@ PanelWindow {
         when: bottomPanel.open
         PropertyChanges { 
           target: frame; 
-          bumpHeight: 30
-          bumpBaseWidth:  150
-          bumpPlateauWidth: 100
+          bumpHeight: Config.workspaces.slotHeight
+          bumpPlateauWidth: Config.workspaces.visibleSlots * Config.workspaces.slotWidth
         }
       }
     ]
 
     transitions: Transition {
       NumberAnimation { 
-        properties: "bumpHeight, bumpBaseWidth, bumpPlateauWidth, bezierSoftness"; 
-        easing.type: Easing.InOutQuad
-        duration: 150
+        properties: "bumpHeight, bumpPlateauWidth"; 
+        easing.type: Config.anims.framePanelCurve
+        duration: Config.anims.framePanelDuration
       }
     }
 
@@ -195,49 +184,18 @@ PanelWindow {
       }
     }
 
-    Item {
-      id: workspaceIndicator
-      anchors { top: parent.top; bottom: parent.bottom }
-      anchors.horizontalCenter: parent.horizontalCenter
-      property real cellOffset: Hyprland.focusedWorkspace.id - 1
+    WorkspaceRow {
+      anchors { top: bottomPanel.top; bottom: bottomPanel.bottom }
+      anchors.horizontalCenter: bottomPanel.horizontalCenter
       width: frame.bumpPlateauWidth
-      opacity: bottomPanel.open ? 1 : 0
-      // visible: bottomPanel.open
-      clip: true
 
-      Behavior on cellOffset {
-        NumberAnimation { 
-          easing.type: Easing.InOutQuad
-          duration: 150
-        }
-      }
+      opacity: bottomPanel.open ? 1 : 0
 
       Behavior on opacity {
         NumberAnimation { 
-          easing.type: Easing.InOutQuad
-          duration: 150
+          easing.type: Config.anims.fadeCurve
+          duration: Config.anims.fadeDuration
         }
-      }
-
-      Row {
-        anchors.verticalCenter: parent.verticalCenter
-        x: (frame.bumpPlateauWidth / 2) - ((100 / 5) / 2) - (workspaceIndicator.cellOffset * 100 / 5)
-
-        Repeater {
-          model: 10
-          Item {
-            required property var modelData
-            id: wsIdContainer
-            implicitWidth: 100 / 5
-            implicitHeight: 30
-            Text {
-              anchors.centerIn: parent
-              text: wsIdContainer.modelData + 1
-              color: Colors.text
-            }
-          }
-        }
-
       }
     }
   }

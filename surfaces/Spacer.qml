@@ -5,7 +5,7 @@ import qs.config
 PanelWindow {
   required property string direction
   id: root
-  exclusiveZone: Sizes.frameThickness
+  exclusiveZone: Config.frame.thickness
 
   mask: Region {}
 
@@ -16,7 +16,7 @@ PanelWindow {
     right: direction !== "left"
   }
 
-  implicitHeight: direction === "top" || direction === "bottom" ? Sizes.frameThickness : 0
-  implicitWidth:  direction === "left" || direction === "right" ? Sizes.frameThickness : 0
+  implicitHeight: direction === "top" || direction === "bottom" ? Config.frame.thickness : 0
+  implicitWidth:  direction === "left" || direction === "right" ? Config.frame.thickness : 0
   color: "transparent"
 }

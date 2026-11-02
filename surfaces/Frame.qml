@@ -49,6 +49,8 @@ PanelWindow {
       property real bumpHeight: Config.bottomPanel.neutralHeight
       property real bezierSoftness: Config.bottomPanel.curveSoftness
 
+      property real bottomPanelBaseWidth: Config.bottomPanel.width + (Config.bottomPanel.radius * 2)
+
       startX: frame.innerLeftFrame + Config.frame.radius
       startY: frame.innerTopFrame
 
@@ -77,18 +79,37 @@ PanelWindow {
       }
 
       PathLine {
-        x: frame.frameCenterX + frame.bumpBaseWidth / 2
+        x: frame.frameCenterX + frame.bottomPanelBaseWidth / 2
         y: frame.innerBottomFrame
       }
 
       // Bottom Bump
-      PathCubic {
-        x: frame.frameCenterX + (frame.bumpPlateauWidth / 2); 
-        y: frame.innerBottomFrame - frame.bumpHeight
-        control1X: frame.frameCenterX + (frame.bumpBaseWidth / 2) - frame.bezierSoftness; 
-        control1Y: frame.innerBottomFrame
-        control2X: frame.frameCenterX + (frame.bumpPlateauWidth / 2) + frame.bezierSoftness; 
-        control2Y: frame.innerBottomFrame - frame.bumpHeight
+      // PathCubic {
+      //   x: frame.frameCenterX + (frame.bumpPlateauWidth / 2); 
+      //   y: frame.innerBottomFrame - frame.bumpHeight
+      //   control1X: frame.frameCenterX + (frame.bumpBaseWidth / 2) - frame.bezierSoftness; 
+      //   control1Y: frame.innerBottomFrame
+      //   control2X: frame.frameCenterX + (frame.bumpPlateauWidth / 2) + frame.bezierSoftness; 
+      //   control2Y: frame.innerBottomFrame - frame.bumpHeight
+      // }
+      PathArc {
+        x: frame.frameCenterX + (frame.bottomPanelBaseWidth / 2) - Config.bottomPanel.radius;
+        y: frame.innerBottomFrame - Config.bottomPanel.radius;
+        radiusX: Config.bottomPanel.radius
+        radiusY: Config.bottomPanel.radius
+      }
+
+      PathLine {
+        x: frame.frameCenterX + (frame.bumpBaseWidth / 2) - Config.bottomPanel.radius
+        y: frame.innerBottomFrame - frame.bumpHeight + Config.bottomPanel.radius
+      }
+
+      PathArc {
+        x: frame.frameCenterX + (frame.bumpPlateauWidth / 2);
+        y: frame.innerBottomFrame - frame.bumpHeight 
+        radiusX: Config.bottomPanel.radius
+        radiusY: Config.bottomPanel.radius
+        direction: PathArc.Counterclockwise
       }
 
       PathLine {
@@ -96,11 +117,32 @@ PanelWindow {
         y: frame.innerBottomFrame - frame.bumpHeight
       }
 
-      PathCubic {
-        x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame
-        control1X: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - frame.bezierSoftness; control1Y: frame.innerBottomFrame - frame.bumpHeight
-        control2X: frame.frameCenterX - (frame.bumpBaseWidth / 2) + frame.bezierSoftness; control2Y: frame.innerBottomFrame
+      PathArc {
+        x: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - Config.bottomPanel.radius;
+        y: frame.innerBottomFrame - frame.bumpHeight + Config.bottomPanel.radius
+        radiusX: Config.bottomPanel.radius
+        radiusY: Config.bottomPanel.radius
+        direction: PathArc.Counterclockwise
       }
+
+      // PathCubic {
+      //   x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame
+      //   control1X: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - frame.bezierSoftness; control1Y: frame.innerBottomFrame - frame.bumpHeight
+      //   control2X: frame.frameCenterX - (frame.bumpBaseWidth / 2) + frame.bezierSoftness; control2Y: frame.innerBottomFrame
+      // }
+
+      PathLine {
+        x: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - Config.bottomPanel.radius
+        y: frame.innerBottomFrame - Config.bottomPanel.radius
+      }
+
+      PathArc {
+        x: frame.frameCenterX - (frame.bumpBaseWidth / 2) - (Config.bottomPanel.radius * 2); 
+        y: frame.innerBottomFrame
+        radiusX: Config.bottomPanel.radius
+        radiusY: Config.bottomPanel.radius
+      }
+
       //
 
       PathLine { 

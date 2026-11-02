@@ -2,14 +2,12 @@ import QtQuick
 import Quickshell
 import QtQuick.Shapes
 import Quickshell.Wayland
-import Quickshell.Hyprland
 import qs.config
 import qs.components
 import qs.services
 
 PanelWindow {
   id: root
-
   anchors {
     top: true
     bottom : true
@@ -17,9 +15,9 @@ PanelWindow {
     right: true
   }
 
-  mask: Region { 
+  mask: Region {
     Region {
-      item: bottomPanel 
+      item: bottomPanel
     }
   }
 
@@ -44,19 +42,20 @@ PanelWindow {
       property real frameCenterX: root.width / 2
       property real frameCenterY: root.height / 2
 
-      property real bumpBaseWidth: bumpPlateauWidth + (Config.bottomPanel.travel * 2)
-      property real bumpPlateauWidth: Config.bottomPanel.neutralWidth
-      property real bumpHeight: Config.bottomPanel.neutralHeight
-      property real bezierSoftness: Config.bottomPanel.curveSoftness
+      // property real baseWidth: Config.bottomPanel.width + (Config.bottomPanel.radius * 2)
+      // property real plateauWidth: Config.bottomPanel.width - (Config.bottomPanel.radius * 2)
+      // property real verticalHeight: Config.bottomPanel.height - (Config.bottomPanel.radius * 2)
 
-      property real bottomPanelBaseWidth: Config.bottomPanel.width + (Config.bottomPanel.radius * 2)
+      property real baseWidth: bottomPanel.bumpWidth + (bottomPanel.bumpRadius * 2)
+      property real plateauWidth: bottomPanel.bumpWidth - (bottomPanel.bumpRadius * 2)
+      property real verticalHeight: bottomPanel.bumpHeight - (bottomPanel.bumpRadius * 2)
 
       startX: frame.innerLeftFrame + Config.frame.radius
       startY: frame.innerTopFrame
 
       PathLine { 
         x: frame.innerRightFrame - Config.frame.radius
-        y: frame. innerTopFrame
+        y: frame.innerTopFrame
       }
 
       PathArc {
@@ -79,71 +78,57 @@ PanelWindow {
       }
 
       PathLine {
-        x: frame.frameCenterX + frame.bottomPanelBaseWidth / 2
+        x: frame.frameCenterX + frame.baseWidth / 2
         y: frame.innerBottomFrame
       }
 
       // Bottom Bump
-      // PathCubic {
-      //   x: frame.frameCenterX + (frame.bumpPlateauWidth / 2); 
-      //   y: frame.innerBottomFrame - frame.bumpHeight
-      //   control1X: frame.frameCenterX + (frame.bumpBaseWidth / 2) - frame.bezierSoftness; 
-      //   control1Y: frame.innerBottomFrame
-      //   control2X: frame.frameCenterX + (frame.bumpPlateauWidth / 2) + frame.bezierSoftness; 
-      //   control2Y: frame.innerBottomFrame - frame.bumpHeight
-      // }
       PathArc {
-        x: frame.frameCenterX + (frame.bottomPanelBaseWidth / 2) - Config.bottomPanel.radius;
-        y: frame.innerBottomFrame - Config.bottomPanel.radius;
-        radiusX: Config.bottomPanel.radius
-        radiusY: Config.bottomPanel.radius
+        x: frame.frameCenterX + bottomPanel.bumpWidth / 2
+        y: frame.innerBottomFrame - bottomPanel.bumpRadius;
+        radiusX: bottomPanel.bumpRadius
+        radiusY: bottomPanel.bumpRadius
       }
 
       PathLine {
-        x: frame.frameCenterX + (frame.bumpBaseWidth / 2) - Config.bottomPanel.radius
-        y: frame.innerBottomFrame - frame.bumpHeight + Config.bottomPanel.radius
+        x: frame.frameCenterX + (bottomPanel.bumpWidth / 2)
+        y: frame.innerBottomFrame - frame.verticalHeight - bottomPanel.bumpRadius
       }
 
       PathArc {
-        x: frame.frameCenterX + (frame.bumpPlateauWidth / 2);
-        y: frame.innerBottomFrame - frame.bumpHeight 
-        radiusX: Config.bottomPanel.radius
-        radiusY: Config.bottomPanel.radius
+        x: frame.frameCenterX + (frame.plateauWidth / 2);
+        y: frame.innerBottomFrame - bottomPanel.bumpHeight 
+        radiusX: bottomPanel.bumpRadius
+        radiusY: bottomPanel.bumpRadius
         direction: PathArc.Counterclockwise
       }
 
       PathLine {
-        x: frame.frameCenterX - (frame.bumpPlateauWidth / 2)
-        y: frame.innerBottomFrame - frame.bumpHeight
+        x: frame.frameCenterX - (frame.plateauWidth / 2)
+        y: frame.innerBottomFrame - bottomPanel.bumpHeight
       }
 
       PathArc {
-        x: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - Config.bottomPanel.radius;
-        y: frame.innerBottomFrame - frame.bumpHeight + Config.bottomPanel.radius
-        radiusX: Config.bottomPanel.radius
-        radiusY: Config.bottomPanel.radius
+        x: frame.frameCenterX - (frame.plateauWidth / 2) - bottomPanel.bumpRadius;
+        y: frame.innerBottomFrame - bottomPanel.bumpHeight + bottomPanel.bumpRadius
+        radiusX: bottomPanel.bumpRadius
+        radiusY: bottomPanel.bumpRadius
         direction: PathArc.Counterclockwise
       }
 
-      // PathCubic {
-      //   x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame
-      //   control1X: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - frame.bezierSoftness; control1Y: frame.innerBottomFrame - frame.bumpHeight
-      //   control2X: frame.frameCenterX - (frame.bumpBaseWidth / 2) + frame.bezierSoftness; control2Y: frame.innerBottomFrame
-      // }
-
       PathLine {
-        x: frame.frameCenterX - (frame.bumpPlateauWidth / 2) - Config.bottomPanel.radius
-        y: frame.innerBottomFrame - Config.bottomPanel.radius
+        x: frame.frameCenterX - (frame.plateauWidth / 2) - bottomPanel.bumpRadius
+        y: frame.innerBottomFrame - bottomPanel.bumpRadius
       }
 
       PathArc {
-        x: frame.frameCenterX - (frame.bumpBaseWidth / 2) - (Config.bottomPanel.radius * 2); 
+        x: frame.frameCenterX - (frame.baseWidth / 2); 
         y: frame.innerBottomFrame
-        radiusX: Config.bottomPanel.radius
-        radiusY: Config.bottomPanel.radius
+        radiusX: bottomPanel.bumpRadius
+        radiusY: bottomPanel.bumpRadius
       }
 
-      //
+      ////////////////////////
 
       PathLine { 
         x: frame.innerLeftFrame + Config.frame.radius
@@ -179,35 +164,34 @@ PanelWindow {
   Item {
     id: bottomPanel
     property bool open: false
+    property real contentWidth: Config.workspaces.slotWidth * Config.workspaces.visibleSlots
+    property real contentHeight: 0
+    property real padding: bumpRadius
+    property real bumpHeight: contentHeight + padding * 2
+    property real bumpWidth: contentWidth + padding * 2
+    property real bumpRadius: { 
+      let tmp_r = (contentWidth < contentHeight ? contentWidth / 2 : contentHeight / 2) 
+      tmp_r > Config.frame.radius ? Config.frame.radius : tmp_r 
+    }
 
-    x: frame.frameCenterX - (frame.bumpBaseWidth / 2); y: frame.innerBottomFrame - frame.bumpHeight
-    width: frame.bumpBaseWidth; 
+    x: frame.frameCenterX - (bottomPanel.bumpWidth / 2); y: frame.innerBottomFrame - bottomPanel.bumpHeight
+    width: bottomPanel.bumpWidth; 
     height: root.height - bottomPanel.y
 
     states: [
       State {
-        name: "hovered"
-        when: !bottomPanel.open && mouse.hovered
-        PropertyChanges { 
-          target: frame; 
-          bumpHeight: Config.bottomPanel.hoveredHeight
-          bumpPlateauWidth: Config.bottomPanel.hoveredWidth
-        }
-      },
-      State {
         name: "open"
         when: bottomPanel.open
         PropertyChanges { 
-          target: frame; 
-          bumpHeight: Config.workspaces.slotHeight
-          bumpPlateauWidth: Config.workspaces.visibleSlots * Config.workspaces.slotWidth
+          target: bottomPanel; 
+          contentHeight: Config.workspaces.slotHeight
         }
       }
     ]
 
     transitions: Transition {
       NumberAnimation { 
-        properties: "bumpHeight, bumpPlateauWidth"; 
+        properties: "contentHeight"; 
         easing.type: Config.anims.framePanelCurve
         duration: Config.anims.framePanelDuration
       }
@@ -229,23 +213,11 @@ PanelWindow {
       onTriggered: bottomPanel.open = false
     }
 
-    TapHandler {
-      onTapped: (eventPoint, button) => bottomPanel.open = true
-    }
-
-    HoverHandler {
-      id: mouse
-      acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-      cursorShape: Qt.PointingHandCursor
-      onHoveredChanged: {
-        if (!mouse.hovered) bottomPanel.open = false
-      }
-    }
-
     WorkspaceRow {
-      anchors { top: bottomPanel.top; bottom: bottomPanel.bottom }
+      anchors { top: bottomPanel.top }
       anchors.horizontalCenter: bottomPanel.horizontalCenter
-      width: frame.bumpPlateauWidth
+      width: bottomPanel.contentWidth
+      height: bottomPanel.bumpHeight
 
       opacity: bottomPanel.open ? 1 : 0
 
@@ -257,7 +229,7 @@ PanelWindow {
       }
       Behavior on cellOffset {
         SequentialAnimation {
-          PauseAnimation { duration: Config.anims.framePanelDuration * (1 - (frame.bumpHeight) / Config.workspaces.slotHeight) }
+          PauseAnimation { duration: Config.anims.framePanelDuration * (1 - (bottomPanel.contentHeight) / Config.workspaces.slotHeight) }
           NumberAnimation { 
             easing.type: Config.anims.workspaceIndicatorCurve
             duration: Config.anims.workspaceIndicatorDuration

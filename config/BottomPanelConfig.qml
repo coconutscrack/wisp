@@ -2,12 +2,10 @@ import Quickshell
 import QtQuick
 
 QtObject {
-  // property int travel: 25
-  // property int curveSoftness: 15
-  property int width: 30
-  property int height: 9
-  // property int hoveredWidth: 40
-  // property int hoveredHeight: 12
+  property int width: 100
+  property int height: 100
 
-  property int radius: 5
+  // property int radius: width < height ? width / 4 : height / 4
+  property int radius: { let tmp_r = (width < height ? width / 4 : height / 4) 
+  tmp_r > 20 ? 20 : tmp_r }
 }

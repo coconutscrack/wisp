@@ -4,7 +4,6 @@ import qs.config
 
 PanelWindow {
   required property string direction
-  id: root
   exclusiveZone: Config.frame.thickness
 
   mask: Region {}

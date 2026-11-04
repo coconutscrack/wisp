@@ -9,6 +9,9 @@ import qs.services
 
 PanelWindow {
   id: root
+
+  property bool hasOpenPanel: topPanel.open || bottomPanel.open || rightPanel.open
+
   anchors {
     top: true
     bottom : true

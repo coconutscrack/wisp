@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import QtQuick.Shapes
+import QtQuick.Effects
 import Quickshell.Wayland
 import qs.config
 import qs.components
@@ -17,139 +18,260 @@ PanelWindow {
 
   mask: Region {
     Region {
-      item: bottomPanel
+      item: rightPanel
     }
   }
 
-  WlrLayershell.layer: WlrLayer.Top
   WlrLayershell.namespace: "qs"
 
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
 
   Shape {
+    layer.enabled: true
+    layer.effect: MultiEffect {
+      autoPaddingEnabled: false
+      blurMax: Config.frame.thickness
+      shadowColor: Qt.rgba(0, 0, 0, 1)
+      shadowEnabled: true
+      shadowBlur: 1.0
+    }
+
     anchors.fill: parent
+
+    preferredRendererType: Shape.CurveRenderer
+
     ShapePath {
       id: frame
       fillColor: Qt.alpha(Colors.background, Colors.alpha)
       strokeWidth: -1
 
-      property real innerBottomFrame: root.height - Config.frame.thickness
-      property real innerRightFrame: root.width - Config.frame.thickness
-      property real innerLeftFrame: Config.frame.thickness
-      property real innerTopFrame: Config.frame.thickness
+      property real innerBottomEdge: root.height - Config.frame.thickness
+      property real innerRightEdge: root.width - Config.frame.thickness
+      property real innerLeftEdge: Config.frame.thickness
+      property real innerTopEdge: Config.frame.thickness
 
-      property real frameCenterX: root.width / 2
-      property real frameCenterY: root.height / 2
+      property real middleX: root.width / 2
+      property real middleY: root.height / 2
 
-      // property real baseWidth: Config.bottomPanel.width + (Config.bottomPanel.radius * 2)
-      // property real plateauWidth: Config.bottomPanel.width - (Config.bottomPanel.radius * 2)
-      // property real verticalHeight: Config.bottomPanel.height - (Config.bottomPanel.radius * 2)
+      property real topBaseWidth: topPanel.bumpWidth + (topPanel.bumpRadius * 2)
+      property real topPlateauWidth: topPanel.bumpWidth - (topPanel.bumpRadius * 2)
+      property real topVerticalHeight: topPanel.bumpHeight - (topPanel.bumpRadius * 2)
 
-      property real baseWidth: bottomPanel.bumpWidth + (bottomPanel.bumpRadius * 2)
-      property real plateauWidth: bottomPanel.bumpWidth - (bottomPanel.bumpRadius * 2)
-      property real verticalHeight: bottomPanel.bumpHeight - (bottomPanel.bumpRadius * 2)
+      property real bottomBaseWidth: bottomPanel.bumpWidth + (bottomPanel.bumpRadius * 2)
+      property real bottomPlateauWidth: bottomPanel.bumpWidth - (bottomPanel.bumpRadius * 2)
+      property real bottomVerticalHeight: bottomPanel.bumpHeight - (bottomPanel.bumpRadius * 2)
 
-      startX: frame.innerLeftFrame + Config.frame.radius
-      startY: frame.innerTopFrame
+      property real rightBaseHeight: rightPanel.bumpHeight + (rightPanel.bumpRadius * 2)
+      property real rightPlateauHeight: rightPanel.bumpHeight - (rightPanel.bumpRadius * 2)
+      property real rightHorizontalWidth: rightPanel.bumpWidth - (rightPanel.bumpRadius * 2)
 
+
+
+      startX: frame.innerLeftEdge + Config.frame.radius
+      startY: frame.innerTopEdge
+
+      // top left line
       PathLine { 
-        x: frame.innerRightFrame - Config.frame.radius
-        y: frame.innerTopFrame
+        x: frame.middleX - (frame.topBaseWidth / 2)
+        y: frame.innerTopEdge
       }
 
       PathArc {
-        x: frame.innerRightFrame
-        y: frame.innerTopFrame + Config.frame.radius
+        x: frame.middleX - (topPanel.bumpWidth / 2)
+        y: frame.innerTopEdge + topPanel.bumpRadius
+        radiusX: topPanel.bumpRadius
+        radiusY: topPanel.bumpRadius
+      }
+
+      PathLine { 
+        x: frame.middleX - (topPanel.bumpWidth / 2)
+        y: frame.innerTopEdge + topPanel.bumpRadius + frame.topVerticalHeight
+      }
+
+      PathArc {
+        x: frame.middleX - (frame.topPlateauWidth / 2)
+        y: frame.innerTopEdge + topPanel.bumpHeight
+        radiusX: topPanel.bumpRadius
+        radiusY: topPanel.bumpRadius
+        direction: PathArc.Counterclockwise
+      }
+
+      PathLine { 
+        x: frame.middleX + (frame.topPlateauWidth / 2)
+        y: frame.innerTopEdge + topPanel.bumpHeight
+      }
+
+      PathArc {
+        x: frame.middleX + (topPanel.bumpWidth / 2)
+        y: frame.innerTopEdge + topPanel.bumpRadius + frame.topVerticalHeight
+        radiusX: topPanel.bumpRadius
+        radiusY: topPanel.bumpRadius
+        direction: PathArc.Counterclockwise
+      }
+
+      PathLine { 
+        x: frame.middleX + (topPanel.bumpWidth / 2)
+        y: frame.innerTopEdge + topPanel.bumpRadius
+      }
+
+      PathArc {
+        x: frame.middleX + (topPanel.bumpWidth / 2) + topPanel.bumpRadius
+        y: frame.innerTopEdge
+        radiusX: topPanel.bumpRadius
+        radiusY: topPanel.bumpRadius
+      }
+
+      // top right line
+      PathLine { 
+        x: frame.innerRightEdge - Config.frame.radius
+        y: frame.innerTopEdge
+      }
+
+      PathArc {
+        x: frame.innerRightEdge
+        y: frame.innerTopEdge + Config.frame.radius
         radiusX: Config.frame.radius
         radiusY: Config.frame.radius
       }
 
       PathLine { 
-        x: frame.innerRightFrame
-        y: frame.innerBottomFrame - Config.frame.radius
+        x: frame.innerRightEdge
+        y: frame.middleY - frame.rightBaseHeight / 2
       }
 
       PathArc {
-        x: frame.innerRightFrame - Config.frame.radius
-        y: frame.innerBottomFrame
+        x: frame.innerRightEdge - rightPanel.bumpRadius
+        y: frame.middleY - (frame.rightBaseHeight / 2) + rightPanel.bumpRadius
+        radiusX: rightPanel.bumpRadius
+        radiusY: rightPanel.bumpRadius
+      }
+
+      PathLine { 
+        x: frame.innerRightEdge - frame.rightHorizontalWidth - rightPanel.bumpRadius
+        y: frame.middleY - rightPanel.bumpHeight / 2
+      }
+
+      PathArc {
+        x: frame.innerRightEdge - rightPanel.bumpWidth
+        y: frame.middleY - (rightPanel.bumpHeight / 2) + rightPanel.bumpRadius
+        radiusX: rightPanel.bumpRadius
+        radiusY: rightPanel.bumpRadius
+        direction: PathArc.Counterclockwise
+      }
+
+      PathLine {
+        x: frame.innerRightEdge - rightPanel.bumpWidth
+        y: frame.middleY + (rightPanel.bumpHeight / 2) - rightPanel.bumpRadius
+      }
+
+      PathArc {
+        x: frame.innerRightEdge - rightPanel.bumpWidth + rightPanel.bumpRadius
+        y: frame.middleY + (rightPanel.bumpHeight / 2)
+        radiusX: rightPanel.bumpRadius
+        radiusY: rightPanel.bumpRadius
+        direction: PathArc.Counterclockwise
+      }
+
+      PathLine { 
+        x: frame.innerRightEdge - rightPanel.bumpRadius
+        y: frame.middleY + (rightPanel.bumpHeight / 2)
+      }
+
+      PathArc {
+        x: frame.innerRightEdge
+        y: frame.middleY + (frame.rightBaseHeight / 2)
+        radiusX: rightPanel.bumpRadius
+        radiusY: rightPanel.bumpRadius
+      }
+
+      PathLine { 
+        x: frame.innerRightEdge
+        y: frame.innerBottomEdge - Config.frame.radius
+      }
+
+      PathArc {
+        x: frame.innerRightEdge - Config.frame.radius
+        y: frame.innerBottomEdge
         radiusX: Config.frame.radius
         radiusY: Config.frame.radius
       }
 
       PathLine {
-        x: frame.frameCenterX + frame.baseWidth / 2
-        y: frame.innerBottomFrame
+        x: frame.middleX + frame.bottomBaseWidth / 2
+        y: frame.innerBottomEdge
       }
 
-      // Bottom Bump
+      // bottom bump
       PathArc {
-        x: frame.frameCenterX + bottomPanel.bumpWidth / 2
-        y: frame.innerBottomFrame - bottomPanel.bumpRadius;
+        x: frame.middleX + bottomPanel.bumpWidth / 2
+        y: frame.innerBottomEdge - bottomPanel.bumpRadius
         radiusX: bottomPanel.bumpRadius
         radiusY: bottomPanel.bumpRadius
       }
 
       PathLine {
-        x: frame.frameCenterX + (bottomPanel.bumpWidth / 2)
-        y: frame.innerBottomFrame - frame.verticalHeight - bottomPanel.bumpRadius
+        x: frame.middleX + (bottomPanel.bumpWidth / 2)
+        y: frame.innerBottomEdge - frame.bottomVerticalHeight - bottomPanel.bumpRadius
       }
 
       PathArc {
-        x: frame.frameCenterX + (frame.plateauWidth / 2);
-        y: frame.innerBottomFrame - bottomPanel.bumpHeight 
+        x: frame.middleX + (frame.bottomPlateauWidth / 2)
+        y: frame.innerBottomEdge - bottomPanel.bumpHeight 
         radiusX: bottomPanel.bumpRadius
         radiusY: bottomPanel.bumpRadius
         direction: PathArc.Counterclockwise
       }
 
       PathLine {
-        x: frame.frameCenterX - (frame.plateauWidth / 2)
-        y: frame.innerBottomFrame - bottomPanel.bumpHeight
+        x: frame.middleX - (frame.bottomPlateauWidth / 2)
+        y: frame.innerBottomEdge - bottomPanel.bumpHeight
       }
 
       PathArc {
-        x: frame.frameCenterX - (frame.plateauWidth / 2) - bottomPanel.bumpRadius;
-        y: frame.innerBottomFrame - bottomPanel.bumpHeight + bottomPanel.bumpRadius
+        x: frame.middleX - (frame.bottomPlateauWidth / 2) - bottomPanel.bumpRadius
+        y: frame.innerBottomEdge - bottomPanel.bumpHeight + bottomPanel.bumpRadius
         radiusX: bottomPanel.bumpRadius
         radiusY: bottomPanel.bumpRadius
         direction: PathArc.Counterclockwise
       }
 
       PathLine {
-        x: frame.frameCenterX - (frame.plateauWidth / 2) - bottomPanel.bumpRadius
-        y: frame.innerBottomFrame - bottomPanel.bumpRadius
+        x: frame.middleX - (frame.bottomPlateauWidth / 2) - bottomPanel.bumpRadius
+        y: frame.innerBottomEdge - bottomPanel.bumpRadius
       }
 
       PathArc {
-        x: frame.frameCenterX - (frame.baseWidth / 2); 
-        y: frame.innerBottomFrame
+        x: frame.middleX - (frame.bottomBaseWidth / 2)
+        y: frame.innerBottomEdge
         radiusX: bottomPanel.bumpRadius
         radiusY: bottomPanel.bumpRadius
       }
 
-      ////////////////////////
-
+      // bottom left line
       PathLine { 
-        x: frame.innerLeftFrame + Config.frame.radius
-        y: frame.innerBottomFrame
+        x: frame.innerLeftEdge + Config.frame.radius
+        y: frame.innerBottomEdge
       }
 
+      // bottom left arc
       PathArc {
-        x: frame.innerLeftFrame
-        y: frame.innerBottomFrame - Config.frame.radius
+        x: frame.innerLeftEdge
+        y: frame.innerBottomEdge - Config.frame.radius
         radiusX: Config.frame.radius
         radiusY: Config.frame.radius
       }
 
+      // left line
       PathLine { 
-        x: frame.innerLeftFrame
-        y: frame.innerTopFrame + Config.frame.radius
+        x: frame.innerLeftEdge
+        y: frame.innerTopEdge + Config.frame.radius
       }
 
+      // top left arc
       PathArc {
-        x: frame.innerLeftFrame + Config.frame.radius
-        y: frame.innerTopFrame 
+        x: frame.innerLeftEdge + Config.frame.radius
+        y: frame.innerTopEdge 
         radiusX: Config.frame.radius
         radiusY: Config.frame.radius
       }
@@ -162,29 +284,30 @@ PanelWindow {
   }
 
   Item {
-    id: bottomPanel
-    property bool open: false
-    property real contentWidth: Config.workspaces.slotWidth * Config.workspaces.visibleSlots
+    id: topPanel
+    property bool open: true
+    property real contentWidth: clock.width
     property real contentHeight: 0
     property real padding: bumpRadius
-    property real bumpHeight: contentHeight + padding * 2
+    property real bumpHeight: { Math.max(contentHeight + padding * 2 - Config.frame.thickness, 0) }
     property real bumpWidth: contentWidth + padding * 2
     property real bumpRadius: { 
       let tmp_r = (contentWidth < contentHeight ? contentWidth / 2 : contentHeight / 2) 
       tmp_r > Config.frame.radius ? Config.frame.radius : tmp_r 
     }
 
-    x: frame.frameCenterX - (bottomPanel.bumpWidth / 2); y: frame.innerBottomFrame - bottomPanel.bumpHeight
-    width: bottomPanel.bumpWidth; 
-    height: root.height - bottomPanel.y
+    x: frame.middleX - (topPanel.bumpWidth / 2); 
+    y: 0
+    width: topPanel.bumpWidth; 
+    height: frame.innerTopEdge + bumpHeight
 
     states: [
       State {
         name: "open"
-        when: bottomPanel.open
+        when: topPanel.open
         PropertyChanges { 
-          target: bottomPanel; 
-          contentHeight: Config.workspaces.slotHeight
+          target: topPanel; 
+          contentHeight: clock.height
         }
       }
     ]
@@ -197,16 +320,68 @@ PanelWindow {
       }
     }
 
+    Timer {
+      id: closeTopPanelTimer
+      interval: 2000
+      running: false
+      repeat: false
+      onTriggered: topPanel.open = false
+    }
+
+    Clock {
+      id: clock
+      anchors.verticalCenter: topPanel.verticalCenter
+      anchors.horizontalCenter: topPanel.horizontalCenter
+    }
+  }
+
+  Item {
+    id: bottomPanel
+    property bool open: false
+    property real contentWidth: 0
+    property real contentHeight: 0
+    property real padding: bumpRadius
+    property real bumpHeight: { Math.max(contentHeight + padding * 2 - Config.frame.thickness, 0) }
+    property real bumpWidth: contentWidth + padding * 2
+    property real bumpRadius: { 
+      let tmp_r = (contentWidth < contentHeight ? contentWidth / 2 : contentHeight / 2) 
+      tmp_r > Config.frame.radius ? Config.frame.radius : tmp_r 
+    }
+
+    x: frame.middleX - (bottomPanel.bumpWidth / 2); y: frame.innerBottomEdge - bottomPanel.bumpHeight
+    width: bottomPanel.bumpWidth; 
+    height: root.height - bottomPanel.y
+
+    states: [
+      State {
+        name: "open"
+        when: bottomPanel.open
+        PropertyChanges { 
+          target: bottomPanel
+          contentHeight: Config.workspaces.slotHeight
+          contentWidth: Config.workspaces.slotWidth * Config.workspaces.visibleSlots
+        }
+      }
+    ]
+
+    transitions: Transition {
+      NumberAnimation { 
+        properties: "contentHeight, contentWidth"; 
+        easing.type: Config.anims.framePanelCurve
+        duration: Config.anims.framePanelDuration
+      }
+    }
+
     Connections {
       target: FocusedWorkspace
       function onWsIdChanged() { 
         bottomPanel.open = true
-        closePanelTimer.restart()
+        closeBottomPanelTimer.restart()
       }
     }
 
     Timer {
-      id: closePanelTimer
+      id: closeBottomPanelTimer
       interval: 2000
       running: false
       repeat: false
@@ -214,19 +389,12 @@ PanelWindow {
     }
 
     WorkspaceRow {
-      anchors { top: bottomPanel.top }
+      anchors { top: bottomPanel.top; bottom: bottomPanel.bottom}
       anchors.horizontalCenter: bottomPanel.horizontalCenter
       width: bottomPanel.contentWidth
-      height: bottomPanel.bumpHeight
 
       opacity: bottomPanel.open ? 1 : 0
 
-      Behavior on opacity {
-        NumberAnimation { 
-          easing.type: Config.anims.fadeCurve
-          duration: Config.anims.fadeDuration
-        }
-      }
       Behavior on cellOffset {
         SequentialAnimation {
           PauseAnimation { duration: Config.anims.framePanelDuration * (1 - (bottomPanel.contentHeight) / Config.workspaces.slotHeight) }
@@ -234,6 +402,80 @@ PanelWindow {
             easing.type: Config.anims.workspaceIndicatorCurve
             duration: Config.anims.workspaceIndicatorDuration
           }
+        }
+      }
+    }
+  }
+
+  Item {
+    id: rightPanel
+    property bool open: false
+    property real contentWidth: 0
+    property real contentHeight: 0
+    property real padding: bumpRadius
+    property real bumpHeight: contentHeight + padding * 2
+    property real bumpWidth: { Math.max(contentWidth + (padding * 2) - Config.frame.thickness, 0) }
+    property real bumpRadius: { 
+      let tmp_r = (contentWidth < contentHeight ? contentWidth / 2 : contentHeight / 2) 
+      tmp_r > Config.frame.radius ? Config.frame.radius : tmp_r 
+    }
+
+    x: frame.innerRightEdge - bumpWidth
+    y: frame.middleY - (rightPanel.bumpHeight / 2);
+    width: rightPanel.bumpWidth + Config.frame.thickness; 
+    height: bumpHeight
+
+    states: [
+      State {
+        name: "open"
+        when: rightPanel.open
+        PropertyChanges { 
+          target: rightPanel; 
+          contentHeight: volume.height
+          contentWidth: volume.width
+        }
+      }
+    ]
+
+    transitions: Transition {
+      NumberAnimation { 
+        properties: "contentHeight, contentWidth"; 
+        easing.type: Config.anims.framePanelCurve
+        duration: Config.anims.framePanelDuration
+      }
+    }
+
+    Connections {
+      target: Audio
+      function onVolumeChanged() { 
+        rightPanel.open = true
+        closeRightPanelTimer.restart()
+      }
+    }
+
+    Timer {
+      id: closeRightPanelTimer
+      interval: 2000
+      running: false
+      repeat: false
+      onTriggered: { 
+        if (volume.sliderPressed) {
+          restart()
+        } else {
+          rightPanel.open = false
+        }
+      }
+    }
+
+    Volume {
+      id: volume
+      anchors.verticalCenter: rightPanel.verticalCenter
+      anchors.horizontalCenter: rightPanel.horizontalCenter
+      opacity: rightPanel.open? 1 : 0
+
+      onSliderPressedChanged: {
+        if (!sliderPressed) {
+          closeRightPanelTimer.restart()
         }
       }
     }

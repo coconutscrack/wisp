@@ -7,5 +7,6 @@ Singleton {
   readonly property AnimsConfig anims: AnimsConfig {}
   readonly property FrameConfig frame: FrameConfig {}
   readonly property WorkspacesConfig workspaces: WorkspacesConfig {}
-  readonly property BottomPanelConfig bottomPanel: BottomPanelConfig {}
+  readonly property ClockConfig clock: ClockConfig {}
+  readonly property VolumeControlsConfig volumeControls: VolumeControlsConfig {}
 }

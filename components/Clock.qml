@@ -23,4 +23,10 @@ Text {
     font: root.font
     text: root.text
   }
+  Behavior on opacity {
+    NumberAnimation { 
+      easing.type: Config.anims.fadeCurve
+      duration: Config.anims.fadeDuration
+    }
+  }
 }

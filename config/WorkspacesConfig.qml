@@ -6,6 +6,6 @@ QtObject {
   property int slotWidth: 20
   property int slotHeight: 20
   property int visibleSlots: 5
-  property int fontSize: 13
+  property int fontSize: 16
   property real stepKeepScale: 0.9
 }

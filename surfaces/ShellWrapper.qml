@@ -42,6 +42,7 @@ Scope {
 
       Frame {
         visible: monitor.name === focusedScreen?.name && !hasFullscreen
+        WlrLayershell.layer: WlrLayer.Overlay
         screen: modelData
       }
     }

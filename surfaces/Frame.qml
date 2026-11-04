@@ -285,8 +285,8 @@ PanelWindow {
 
   Item {
     id: topPanel
-    property bool open: true
-    property real contentWidth: clock.width
+    property bool open: false
+    property real contentWidth: 0
     property real contentHeight: 0
     property real padding: bumpRadius
     property real bumpHeight: { Math.max(contentHeight + padding * 2 - Config.frame.thickness, 0) }
@@ -304,17 +304,18 @@ PanelWindow {
     states: [
       State {
         name: "open"
-        when: topPanel.open
+        when: topPanel.open || OverlayStatus.open
         PropertyChanges { 
           target: topPanel; 
           contentHeight: clock.height
+          contentWidth: clock.width
         }
       }
     ]
 
     transitions: Transition {
       NumberAnimation { 
-        properties: "contentHeight"; 
+        properties: "contentHeight, contentWidth"; 
         easing.type: Config.anims.framePanelCurve
         duration: Config.anims.framePanelDuration
       }
@@ -330,6 +331,7 @@ PanelWindow {
 
     Clock {
       id: clock
+      opacity: topPanel.open || OverlayStatus.open ? 1 : 0
       anchors.verticalCenter: topPanel.verticalCenter
       anchors.horizontalCenter: topPanel.horizontalCenter
     }
@@ -355,7 +357,7 @@ PanelWindow {
     states: [
       State {
         name: "open"
-        when: bottomPanel.open
+        when: bottomPanel.open || OverlayStatus.open
         PropertyChanges { 
           target: bottomPanel
           contentHeight: Config.workspaces.slotHeight
@@ -393,7 +395,7 @@ PanelWindow {
       anchors.horizontalCenter: bottomPanel.horizontalCenter
       width: bottomPanel.contentWidth
 
-      opacity: bottomPanel.open ? 1 : 0
+      opacity: bottomPanel.open || OverlayStatus.open ? 1 : 0
 
       Behavior on cellOffset {
         SequentialAnimation {
@@ -428,7 +430,7 @@ PanelWindow {
     states: [
       State {
         name: "open"
-        when: rightPanel.open
+        when: rightPanel.open || OverlayStatus.open
         PropertyChanges { 
           target: rightPanel; 
           contentHeight: volume.height
@@ -471,7 +473,7 @@ PanelWindow {
       id: volume
       anchors.verticalCenter: rightPanel.verticalCenter
       anchors.horizontalCenter: rightPanel.horizontalCenter
-      opacity: rightPanel.open? 1 : 0
+      opacity: rightPanel.open || OverlayStatus.open ? 1 : 0
 
       onSliderPressedChanged: {
         if (!sliderPressed) {

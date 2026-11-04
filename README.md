@@ -2,50 +2,35 @@
 
 A desktop shell for [Hyprland](https://hyprland.org), built with [Quickshell](https://quickshell.org) (QML).
 
-Wisp is a **soft frame**: a thin, warm frame around the whole screen with rounded inner corners. The frame reserves its space, so windows tile inside it. Panels grow out of the frame's edges when they're needed and go back into it afterwards, so the frame looks like it bulges out.
+Wisp is a **soft frame**: a thin frame around the whole screen with rounded inner corners. The frame reserves its space, so windows tile inside it. Panels grow out of the frame's edges when they're needed and go back into it afterwards, so the frame looks like it bulges out.
 
-## How panels appear
+## Two modes
 
-The frame is always there. Everything else comes out of it, and each panel has one trigger:
+**The clean frame (default).** Every panel is hidden, so the frame is just a clean outline. A panel comes out only when its trigger fires, then goes back:
 
-- **Change-driven**: comes out when something changes, then goes back. For example, switching workspaces.
+- **Change-driven**: comes out when something changes. For example, switching workspaces or changing the volume.
 - **Threshold-driven**: stays inside the frame until it matters. For example, battery only when it's low.
-- **Summoned**: comes out only when asked for. For example, clicking a panel's bump.
 
-Each panel has a small bump in the frame where it lives, which is always visible. The bump grows slightly on hover and opens fully into the panel when clicked or when the panel's own trigger fires.
+**The overlay (summoned).** A keybind blurs the screen behind the frame and brings every panel out at once. In the middle sits a **control centre**, like Apple's Control Center: widgets for Wi-Fi, Bluetooth and similar. Each widget expands into a fuller view with a hotkey, and the hotkeys are listed in an expandable hint panel in the bottom-left.
 
 ## What works so far
 
-### Frame
+- **Frame**: a frame around the focused monitor, with rounded inner corners and a soft shadow. Four invisible strips reserve its space on each edge. It hides while a window is fullscreen.
+- **Workspace panel** (bottom edge): comes out on a workspace switch and closes 2 seconds later. It shows five workspaces with the current one centred, scrolls sideways on a switch, and fades and shrinks the neighbours with their distance.
+- **Volume panel** (right edge): comes out when the volume changes, with a mute button and a draggable slider. It stays open while you drag.
+- **Clock panel** (top edge): the date and time. It comes out only with the overlay.
+- **Overlay**: Super+Comma blurs and tints the screen behind the frame, and every panel comes out with it. Hyprland fades it in and out, blur included. It also appears over fullscreen windows (the frame stays hidden then).
 
-- A translucent sepia frame around every monitor, with rounded inner corners, blurred by Hyprland.
-- Four invisible strips reserve the frame's space on each edge, so windows tile inside it.
-- One full-screen window draws the frame and all panels. Clicks pass through it everywhere except the bumps.
-
-### Workspace panel (bottom edge, centre)
-
-- A bump in the middle of the bottom edge, drawn with Bézier curves, so it rises smoothly out of the frame.
-- Three states, animated between each other: neutral (a small handle), hover (slightly bigger) and open.
-- Clicking the bump opens it. Moving the pointer away closes it.
-- When open, it shows a row of workspaces 1–10 with the current one in the centre. At the ends, the empty slots stay blank.
-- Switching workspace scrolls the row sideways until the new workspace is centred.
-- The row is revealed as the bump grows, and fades in and out with it.
-
-### Old workspace indicator
-
-The indicator from before the soft-frame design still runs until the workspace panel replaces it: a badge in the bottom-left corner showing the current workspace's number, or the name of a special workspace. It hides 2 seconds after the last switch.
-
-## Next
-
-1. **Workspace service**: a singleton in `services/` that gives the current workspace as a plain number, with a null guard so nothing breaks before Hyprland has reported a workspace (for example at startup).
-2. **Config refactor**: move the scattered numbers into config. Separate the numbers you choose from the ones calculated from them, starting with whether the slot width comes from the open plateau width or the other way round. Timings (`InOutQuad`, 150ms, now repeated three times) get their own singleton.
-3. **Open on workspace switch**: open the bottom panel when the workspace changes and close it again with a `Timer`, so the row's scroll is visible.
+Every bump rises out of the frame with arcs, sized from what it holds, and animates open and closed.
 
 ## Planned
 
+- A **brightness panel** on the left edge, like the volume panel.
 - **Special workspaces**: the workspace panel shows the special workspace's name instead of the row.
-- **Fullscreen**: the frame hides while a window is fullscreen.
-- **More panels**, for example volume and brightness while they change, low battery, network only on disconnect, now playing, notifications, a clock and calendar, and a launcher.
+- Closing the overlay with Escape, and keyboard input while it's open.
+- The **control centre**: Wi-Fi and Bluetooth widgets first, then more. Each expands with a hotkey.
+- The **hint panel** listing the overlay's hotkeys.
+- Possibly more frame panels later: low battery, network only on disconnect, now playing, notifications.
 
 ## Requirements
 
@@ -54,27 +39,24 @@ The indicator from before the soft-frame design still runs until the workspace p
 
 ### Hyprland setup
 
-- All of Wisp's windows use the layer namespace `qs`. Add a layer rule for it that enables blur with `ignore_alpha`, so only the frame and panels are blurred and not the frame window's transparent middle.
-- Set `gaps_out` so windows leave a gap inside the frame.
-- Set window rounding to match the frame's inner corners (30).
+- **Blur:** the overlay window uses the layer namespace `wisp-overlay`. Add a layer rule matching it that enables blur, with `ignore_alpha` so only painted pixels are blurred. The frame uses the namespace `qs` and needs no rule; it isn't meant to be blurred.
+- **Fade:** set Hyprland's layer animations to the `fade` style, so the overlay fades in and out.
+- **Overlay key:** bind a key with the `global` dispatcher to `quickshell:toggle-overlay` (Wisp uses Super+Comma).
+- Set `gaps_out` so windows leave a gap inside the frame, and window rounding to match the frame's inner corners (30).
 
 ## Running
 
-`~/.config/quickshell/` may hold an older copy of Wisp, so start Quickshell pointing at this project:
-
-```sh
-quickshell -p /path/to/wisp
-```
+`~/.config/quickshell/` may hold an older copy of Wisp, so start Quickshell pointing at this project: `qs -c` followed by the path to this folder. `qs log -c` with the same path shows the log.
 
 ## Files
 
-- `shell.qml`: entry point. Creates the frame and the old workspace indicator.
-- `surfaces/`: windows, with their anchoring, masks and triggers.
-  - `FrameWrapper.qml`: one set of strips and one frame per monitor.
+- `shell.qml`: entry point.
+- `surfaces/`: windows and their triggers.
+  - `ShellWrapper.qml`: for each monitor, the strips, the overlay window and the frame window, plus whether the monitor is focused and has a fullscreen window.
   - `Spacer.qml`: an invisible strip that reserves one edge.
-  - `Frame.qml`: the full-screen window that draws the frame and the panels.
-  - `WorkspaceIndicator.qml`: the old workspace indicator.
-- `components/`: visuals with no window. `WorkspaceBadge.qml` is the old indicator's badge.
-- `config/`: look and feel. `Colors.qml` holds the palette by role and `Sizes.qml` the frame's sizes.
-- `services/`: data with no visuals. `Time.qml` provides the current time.
-- `ClockWidget.qml`, `WorkspaceWidget.qml`: leftovers from before the soft frame, not loaded.
+  - `Overlay.qml`: the overlay's blurred, full-screen window.
+  - `Frame.qml`: the window that draws the frame and its panels.
+- `components/`: visuals with no window: `WorkspaceRow`, `Clock`, `Volume`, `VolumeIcon`, `VolumeSlider`.
+- `services/`: data with no visuals: `Time`, `FocusedWorkspace`, `Audio`, `OverlayStatus` (which also holds the overlay's shortcut).
+- `config/`: `Colors` (the palette by role), `Fonts`, and `Config` with one group per feature.
+- `legacy/`: the old workspace indicator and clock, kept for reference and not loaded.

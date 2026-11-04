@@ -3,7 +3,7 @@ import QtQuick
 
 QtObject {
   property int count: 10
-  property int slotWidth: 20
+  property int slotWidth: 24
   property int slotHeight: 20
   property int visibleSlots: 5
   property int fontSize: 16

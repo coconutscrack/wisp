@@ -340,47 +340,18 @@ PanelWindow {
     }
   }
 
-  Item {
+  FramePanel {
     id: bottomPanel
-    property bool open: false
-    property real contentWidth: 0
-    property real contentHeight: 0
-    property real padding: bumpRadius
-    property real bumpHeight: { Math.max(contentHeight + padding * 2 - Config.frame.thickness, 0) }
-    property real bumpWidth: contentWidth + padding * 2
-    property real bumpRadius: { 
-      let tmp_r = (contentWidth < contentHeight ? contentWidth / 2 : contentHeight / 2) 
-      tmp_r > Config.frame.radius ? Config.frame.radius : tmp_r 
-    }
 
-    x: frame.middleX - (bottomPanel.bumpWidth / 2); y: frame.innerBottomEdge - bottomPanel.bumpHeight
-    width: bottomPanel.bumpWidth; 
-    height: root.height - bottomPanel.y
-
-    states: [
-      State {
-        name: "open"
-        when: bottomPanel.open || OverlayStatus.open
-        PropertyChanges { 
-          target: bottomPanel
-          contentHeight: Config.workspaces.slotHeight
-          contentWidth: Config.workspaces.slotWidth * Config.workspaces.visibleSlots
-        }
-      }
-    ]
-
-    transitions: Transition {
-      NumberAnimation { 
-        properties: "contentHeight, contentWidth"; 
-        easing.type: Config.anims.framePanelCurve
-        duration: Config.anims.framePanelDuration
-      }
-    }
+    direction: "bottom"
+    openHeight: Config.workspaces.slotHeight
+    openWidth: Config.workspaces.slotWidth * Config.workspaces.visibleSlots
+    openByOverlay: OverlayStatus.open
 
     Connections {
       target: FocusedWorkspace
       function onWsIdChanged() { 
-        bottomPanel.open = true
+        bottomPanel.openByChange = true
         closeBottomPanelTimer.restart()
       }
     }
@@ -394,11 +365,12 @@ PanelWindow {
     }
 
     WorkspaceRow {
+      id: workspaceRow
       anchors { top: bottomPanel.top; bottom: bottomPanel.bottom}
       anchors.horizontalCenter: bottomPanel.horizontalCenter
       width: bottomPanel.contentWidth
 
-      opacity: bottomPanel.open || OverlayStatus.open ? 1 : 0
+      opacity: open ? 1 : 0
 
       Behavior on cellOffset {
         SequentialAnimation {

@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import qs.config
 import qs.services
 
@@ -13,8 +14,8 @@ Text {
   font.family: Fonts.text
   color: Colors.text
   font.pixelSize: Config.clock.fontSize
-  height: font.pixelSize * 1.2
-  width: textMetrics.width * 1.2
+  height: { (Math.ceil(((font.pixelSize * 1.2) * Screen.devicePixelRatio) / 2) * 2) / Screen.devicePixelRatio }
+  width: { (Math.ceil(((textMetrics.width * 1.2) * Screen.devicePixelRatio) / 2) * 2) / Screen.devicePixelRatio }
 
   TextMetrics {
     id: textMetrics

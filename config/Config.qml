@@ -9,4 +9,5 @@ Singleton {
   readonly property WorkspacesConfig workspaces: WorkspacesConfig {}
   readonly property ClockConfig clock: ClockConfig {}
   readonly property VolumeControlsConfig volumeControls: VolumeControlsConfig {}
+  readonly property BrightnessControlsConfig brightnessControls: BrightnessControlsConfig {}
 }

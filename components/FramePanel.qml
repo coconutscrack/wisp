@@ -37,6 +37,9 @@ Item {
     let tmp_r = (contentWidth < contentHeight ? contentWidth / 2 : contentHeight / 2) 
     tmp_r > Config.frame.radius ? Config.frame.radius : tmp_r 
   }
+  readonly property real arcRadius: {
+    Math.min(bumpRadius, horizontal ? bumpHeight / 2 : bumpWidth / 2)
+  }
 
   anchors {
     top: direction == "top" ? parent.top : undefined

@@ -10,7 +10,7 @@ import qs.services
 PanelWindow {
   id: root
 
-  readonly property bool hasOpenPanel: topPanel.open || bottomPanel.open || rightPanel.open
+  readonly property bool hasOpenPanel: topPanel.open || bottomPanel.open || leftPanel.open || rightPanel.open
 
   anchors {
     top: true
@@ -22,6 +22,9 @@ PanelWindow {
   mask: Region {
     Region {
       item: rightPanel
+    }
+    Region {
+      item: leftPanel
     }
   }
 
@@ -49,6 +52,7 @@ PanelWindow {
 
       topPanel: topPanel
       bottomPanel: bottomPanel
+      leftPanel: leftPanel
       rightPanel: rightPanel
       
       fillColor: Qt.alpha(Colors.background, Colors.alpha)
@@ -92,7 +96,7 @@ PanelWindow {
 
     Timer {
       id: closeBottomPanelTimer
-      interval: Config.frame.popOutDuration
+      interval: Config.frame.panelPopOutDuration
       running: false
       repeat: false
       onTriggered: bottomPanel.openByChange = false
@@ -112,6 +116,55 @@ PanelWindow {
             easing.type: Config.anims.workspaceIndicatorCurve
             duration: Config.anims.workspaceIndicatorDuration
           }
+        }
+      }
+    }
+  }
+
+  FramePanel {
+    id: leftPanel
+
+    direction: "left"
+    openWidth: brightness.width
+    openHeight: brightness.height
+
+    Connections {
+      target: Backlight
+      function onBrightnessKeyPressed() { 
+        leftPanel.openByChange = true
+        closeLeftPanelTimer.restart()
+      }
+    }
+
+    onHoveredChanged: {
+      if (!hovered) {
+        closeLeftPanelTimer.restart()
+      }
+    }
+
+    Timer {
+      id: closeLeftPanelTimer
+      interval: Config.frame.panelPopOutDuration
+      running: false
+      repeat: false
+      onTriggered: { 
+        if (brightness.sliderPressed || leftPanel.hovered) {
+          restart()
+        } else {
+          leftPanel.openByChange = false
+        }
+      }
+    }
+
+    Brightness {
+      id: brightness
+      anchors.verticalCenter: leftPanel.verticalCenter
+      anchors.horizontalCenter: leftPanel.horizontalCenter
+      opacity: leftPanel.open ? 1 : 0
+
+      onSliderPressedChanged: {
+        if (!sliderPressed) {
+          closeLeftPanelTimer.restart()
         }
       }
     }
@@ -140,7 +193,7 @@ PanelWindow {
 
     Timer {
       id: closeRightPanelTimer
-      interval: Config.frame.popOutDuration
+      interval: Config.frame.panelPopOutDuration
       running: false
       repeat: false
       onTriggered: { 

@@ -11,6 +11,7 @@ ShapePath {
   required property real outerHeight
   required property FramePanel topPanel
   required property FramePanel bottomPanel
+  required property FramePanel leftPanel
   required property FramePanel rightPanel
 
   property real innerBottomEdge: outerHeight - Config.frame.thickness
@@ -21,17 +22,21 @@ ShapePath {
   property real middleX: outerWidth / 2
   property real middleY: outerHeight / 2
 
-  property real topBaseWidth: topPanel.bumpWidth + (topPanel.bumpRadius * 2)
-  property real topPlateauWidth: topPanel.bumpWidth - (topPanel.bumpRadius * 2)
-  property real topVerticalHeight: topPanel.bumpHeight - (topPanel.bumpRadius * 2)
+  property real topBaseWidth: topPanel.bumpWidth + (topPanel.arcRadius * 2)
+  property real topPlateauWidth: topPanel.bumpWidth - (topPanel.arcRadius * 2)
+  property real topVerticalHeight: topPanel.bumpHeight - (topPanel.arcRadius * 2)
 
-  property real bottomBaseWidth: bottomPanel.bumpWidth + (bottomPanel.bumpRadius * 2)
-  property real bottomPlateauWidth: bottomPanel.bumpWidth - (bottomPanel.bumpRadius * 2)
-  property real bottomVerticalHeight: bottomPanel.bumpHeight - (bottomPanel.bumpRadius * 2)
+  property real bottomBaseWidth: bottomPanel.bumpWidth + (bottomPanel.arcRadius * 2)
+  property real bottomPlateauWidth: bottomPanel.bumpWidth - (bottomPanel.arcRadius * 2)
+  property real bottomVerticalHeight: bottomPanel.bumpHeight - (bottomPanel.arcRadius * 2)
 
-  property real rightBaseHeight: rightPanel.bumpHeight + (rightPanel.bumpRadius * 2)
-  property real rightPlateauHeight: rightPanel.bumpHeight - (rightPanel.bumpRadius * 2)
-  property real rightHorizontalWidth: rightPanel.bumpWidth - (rightPanel.bumpRadius * 2)
+  property real leftBaseHeight: leftPanel.bumpHeight + (leftPanel.arcRadius * 2)
+  property real leftPlateauHeight: leftPanel.bumpHeight - (leftPanel.arcRadius * 2)
+  property real leftHorizontalWidth: leftPanel.bumpWidth - (leftPanel.arcRadius * 2)
+
+  property real rightBaseHeight: rightPanel.bumpHeight + (rightPanel.arcRadius * 2)
+  property real rightPlateauHeight: rightPanel.bumpHeight - (rightPanel.arcRadius * 2)
+  property real rightHorizontalWidth: rightPanel.bumpWidth - (rightPanel.arcRadius * 2)
 
   startX: frame.innerLeftEdge + Config.frame.radius
   startY: frame.innerTopEdge
@@ -44,21 +49,21 @@ ShapePath {
 
   PathArc {
     x: frame.middleX - (topPanel.bumpWidth / 2)
-    y: frame.innerTopEdge + topPanel.bumpRadius
-    radiusX: topPanel.bumpRadius
-    radiusY: topPanel.bumpRadius
+    y: frame.innerTopEdge + topPanel.arcRadius
+    radiusX: topPanel.arcRadius
+    radiusY: topPanel.arcRadius
   }
 
   PathLine { 
     x: frame.middleX - (topPanel.bumpWidth / 2)
-    y: frame.innerTopEdge + topPanel.bumpRadius + frame.topVerticalHeight
+    y: frame.innerTopEdge + topPanel.arcRadius + frame.topVerticalHeight
   }
 
   PathArc {
     x: frame.middleX - (frame.topPlateauWidth / 2)
     y: frame.innerTopEdge + topPanel.bumpHeight
-    radiusX: topPanel.bumpRadius
-    radiusY: topPanel.bumpRadius
+    radiusX: topPanel.arcRadius
+    radiusY: topPanel.arcRadius
     direction: PathArc.Counterclockwise
   }
 
@@ -69,22 +74,22 @@ ShapePath {
 
   PathArc {
     x: frame.middleX + (topPanel.bumpWidth / 2)
-    y: frame.innerTopEdge + topPanel.bumpRadius + frame.topVerticalHeight
-    radiusX: topPanel.bumpRadius
-    radiusY: topPanel.bumpRadius
+    y: frame.innerTopEdge + topPanel.arcRadius + frame.topVerticalHeight
+    radiusX: topPanel.arcRadius
+    radiusY: topPanel.arcRadius
     direction: PathArc.Counterclockwise
   }
 
   PathLine { 
     x: frame.middleX + (topPanel.bumpWidth / 2)
-    y: frame.innerTopEdge + topPanel.bumpRadius
+    y: frame.innerTopEdge + topPanel.arcRadius
   }
 
   PathArc {
-    x: frame.middleX + (topPanel.bumpWidth / 2) + topPanel.bumpRadius
+    x: frame.middleX + (topPanel.bumpWidth / 2) + topPanel.arcRadius
     y: frame.innerTopEdge
-    radiusX: topPanel.bumpRadius
-    radiusY: topPanel.bumpRadius
+    radiusX: topPanel.arcRadius
+    radiusY: topPanel.arcRadius
   }
 
   // top right line
@@ -106,48 +111,48 @@ ShapePath {
   }
 
   PathArc {
-    x: frame.innerRightEdge - rightPanel.bumpRadius
-    y: frame.middleY - (frame.rightBaseHeight / 2) + rightPanel.bumpRadius
-    radiusX: rightPanel.bumpRadius
-    radiusY: rightPanel.bumpRadius
+    x: frame.innerRightEdge - rightPanel.arcRadius
+    y: frame.middleY - (frame.rightBaseHeight / 2) + rightPanel.arcRadius
+    radiusX: rightPanel.arcRadius
+    radiusY: rightPanel.arcRadius
   }
 
   PathLine { 
-    x: frame.innerRightEdge - frame.rightHorizontalWidth - rightPanel.bumpRadius
+    x: frame.innerRightEdge - frame.rightHorizontalWidth - rightPanel.arcRadius
     y: frame.middleY - rightPanel.bumpHeight / 2
   }
 
   PathArc {
     x: frame.innerRightEdge - rightPanel.bumpWidth
-    y: frame.middleY - (rightPanel.bumpHeight / 2) + rightPanel.bumpRadius
-    radiusX: rightPanel.bumpRadius
-    radiusY: rightPanel.bumpRadius
+    y: frame.middleY - (rightPanel.bumpHeight / 2) + rightPanel.arcRadius
+    radiusX: rightPanel.arcRadius
+    radiusY: rightPanel.arcRadius
     direction: PathArc.Counterclockwise
   }
 
   PathLine {
     x: frame.innerRightEdge - rightPanel.bumpWidth
-    y: frame.middleY + (rightPanel.bumpHeight / 2) - rightPanel.bumpRadius
+    y: frame.middleY + (rightPanel.bumpHeight / 2) - rightPanel.arcRadius
   }
 
   PathArc {
-    x: frame.innerRightEdge - rightPanel.bumpWidth + rightPanel.bumpRadius
+    x: frame.innerRightEdge - rightPanel.bumpWidth + rightPanel.arcRadius
     y: frame.middleY + (rightPanel.bumpHeight / 2)
-    radiusX: rightPanel.bumpRadius
-    radiusY: rightPanel.bumpRadius
+    radiusX: rightPanel.arcRadius
+    radiusY: rightPanel.arcRadius
     direction: PathArc.Counterclockwise
   }
 
   PathLine { 
-    x: frame.innerRightEdge - rightPanel.bumpRadius
+    x: frame.innerRightEdge - rightPanel.arcRadius
     y: frame.middleY + (rightPanel.bumpHeight / 2)
   }
 
   PathArc {
     x: frame.innerRightEdge
     y: frame.middleY + (frame.rightBaseHeight / 2)
-    radiusX: rightPanel.bumpRadius
-    radiusY: rightPanel.bumpRadius
+    radiusX: rightPanel.arcRadius
+    radiusY: rightPanel.arcRadius
   }
 
   PathLine { 
@@ -170,21 +175,21 @@ ShapePath {
   // bottom bump
   PathArc {
     x: frame.middleX + bottomPanel.bumpWidth / 2
-    y: frame.innerBottomEdge - bottomPanel.bumpRadius
-    radiusX: bottomPanel.bumpRadius
-    radiusY: bottomPanel.bumpRadius
+    y: frame.innerBottomEdge - bottomPanel.arcRadius
+    radiusX: bottomPanel.arcRadius
+    radiusY: bottomPanel.arcRadius
   }
 
   PathLine {
     x: frame.middleX + (bottomPanel.bumpWidth / 2)
-    y: frame.innerBottomEdge - frame.bottomVerticalHeight - bottomPanel.bumpRadius
+    y: frame.innerBottomEdge - frame.bottomVerticalHeight - bottomPanel.arcRadius
   }
 
   PathArc {
     x: frame.middleX + (frame.bottomPlateauWidth / 2)
     y: frame.innerBottomEdge - bottomPanel.bumpHeight 
-    radiusX: bottomPanel.bumpRadius
-    radiusY: bottomPanel.bumpRadius
+    radiusX: bottomPanel.arcRadius
+    radiusY: bottomPanel.arcRadius
     direction: PathArc.Counterclockwise
   }
 
@@ -194,23 +199,23 @@ ShapePath {
   }
 
   PathArc {
-    x: frame.middleX - (frame.bottomPlateauWidth / 2) - bottomPanel.bumpRadius
-    y: frame.innerBottomEdge - bottomPanel.bumpHeight + bottomPanel.bumpRadius
-    radiusX: bottomPanel.bumpRadius
-    radiusY: bottomPanel.bumpRadius
+    x: frame.middleX - (frame.bottomPlateauWidth / 2) - bottomPanel.arcRadius
+    y: frame.innerBottomEdge - bottomPanel.bumpHeight + bottomPanel.arcRadius
+    radiusX: bottomPanel.arcRadius
+    radiusY: bottomPanel.arcRadius
     direction: PathArc.Counterclockwise
   }
 
   PathLine {
-    x: frame.middleX - (frame.bottomPlateauWidth / 2) - bottomPanel.bumpRadius
-    y: frame.innerBottomEdge - bottomPanel.bumpRadius
+    x: frame.middleX - (frame.bottomPlateauWidth / 2) - bottomPanel.arcRadius
+    y: frame.innerBottomEdge - bottomPanel.arcRadius
   }
 
   PathArc {
     x: frame.middleX - (frame.bottomBaseWidth / 2)
     y: frame.innerBottomEdge
-    radiusX: bottomPanel.bumpRadius
-    radiusY: bottomPanel.bumpRadius
+    radiusX: bottomPanel.arcRadius
+    radiusY: bottomPanel.arcRadius
   }
 
   // bottom left line
@@ -227,7 +232,58 @@ ShapePath {
     radiusY: Config.frame.radius
   }
 
-  // left line
+  // bottom left line
+  PathLine { 
+    x: frame.innerLeftEdge
+    y: frame.middleY + frame.leftBaseHeight / 2
+  }
+
+  PathArc {
+    x: frame.innerLeftEdge + leftPanel.arcRadius
+    y: frame.middleY + leftPanel.bumpHeight / 2
+    radiusX: leftPanel.arcRadius
+    radiusY: leftPanel.arcRadius
+  }
+
+  PathLine {
+    x: frame.innerLeftEdge + leftPanel.arcRadius + frame.leftHorizontalWidth
+    y: frame.middleY + leftPanel.bumpHeight / 2
+  }
+
+  PathArc {
+    x: frame.innerLeftEdge + leftPanel.bumpWidth
+    y: frame.middleY + frame.leftPlateauHeight / 2
+    radiusX: leftPanel.arcRadius
+    radiusY: leftPanel.arcRadius
+    direction: PathArc.Counterclockwise
+  }
+
+  PathLine {
+    x: frame.innerLeftEdge + leftPanel.bumpWidth
+    y: frame.middleY - frame.leftPlateauHeight / 2
+  }
+
+  PathArc {
+    x: frame.innerLeftEdge + leftPanel.bumpWidth - leftPanel.arcRadius
+    y: frame.middleY - leftPanel.bumpHeight / 2
+    radiusX: leftPanel.arcRadius
+    radiusY: leftPanel.arcRadius
+    direction: PathArc.Counterclockwise
+  }
+
+  PathLine {
+    x: frame.innerLeftEdge + leftPanel.arcRadius
+    y: frame.middleY - leftPanel.bumpHeight / 2
+  }
+
+  PathArc {
+    x: frame.innerLeftEdge
+    y: frame.middleY - frame.leftBaseHeight / 2
+    radiusX: leftPanel.arcRadius
+    radiusY: leftPanel.arcRadius
+  }
+
+  // top left line
   PathLine { 
     x: frame.innerLeftEdge
     y: frame.innerTopEdge + Config.frame.radius

@@ -31,6 +31,7 @@ PanelWindow {
   exclusionMode: ExclusionMode.Ignore
 
   Shape {
+    layer.samples: 4
     layer.enabled: true
     layer.effect: MultiEffect {
       autoPaddingEnabled: false
@@ -41,8 +42,6 @@ PanelWindow {
     }
 
     anchors.fill: parent
-
-    preferredRendererType: Shape.CurveRenderer
 
     FrameInnerEdge {
       outerWidth: root.width
@@ -93,7 +92,7 @@ PanelWindow {
 
     Timer {
       id: closeBottomPanelTimer
-      interval: 2000
+      interval: Config.frame.popOutDuration
       running: false
       repeat: false
       onTriggered: bottomPanel.openByChange = false
@@ -141,7 +140,7 @@ PanelWindow {
 
     Timer {
       id: closeRightPanelTimer
-      interval: 2000
+      interval: Config.frame.popOutDuration
       running: false
       repeat: false
       onTriggered: { 

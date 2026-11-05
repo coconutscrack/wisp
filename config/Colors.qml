@@ -13,6 +13,7 @@ Singleton {
   property color success:       "#8DA287"
   property color warning:       "#C9A15B"
   property color critical:      "#BF6F5E"
+  property color shadow:        "#000000"
   property real  alpha:         1
   property real  overlayAlpha:  0.5
 }

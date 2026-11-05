@@ -11,9 +11,6 @@ PanelWindow {
   id: root
 
   readonly property bool hasOpenPanel: topPanel.open || bottomPanel.open || rightPanel.open
-  // readonly property FramePanel topPanel: topPanel
-  // readonly property FramePanel bottomPanel: bottomPanel
-  // readonly property FramePanel rightPanel: rightPanel
 
   anchors {
     top: true
@@ -38,7 +35,7 @@ PanelWindow {
     layer.effect: MultiEffect {
       autoPaddingEnabled: false
       blurMax: Config.frame.thickness
-      shadowColor: Qt.rgba(0, 0, 0, 1)
+      shadowColor: Colors.shadow
       shadowEnabled: true
       shadowBlur: 1.0
     }

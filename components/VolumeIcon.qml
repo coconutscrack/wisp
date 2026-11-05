@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import Quickshell
 import qs.config
 import qs.services
 
@@ -9,11 +8,9 @@ Button {
 
   property real low: 1 / 3
   property real mid: 2 / 3
-  property real high: 3 / 3
   required property int fontSize
 
   contentItem: Text {
-    id: icon
     text: {
       if (Audio.muted) {
         return ""
@@ -50,7 +47,6 @@ Button {
   }
 
   HoverHandler {
-    id: hoverHandler
     acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
     cursorShape: Qt.PointingHandCursor
   }

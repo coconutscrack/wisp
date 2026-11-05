@@ -33,8 +33,6 @@ ShapePath {
   property real rightPlateauHeight: rightPanel.bumpHeight - (rightPanel.bumpRadius * 2)
   property real rightHorizontalWidth: rightPanel.bumpWidth - (rightPanel.bumpRadius * 2)
 
-
-
   startX: frame.innerLeftEdge + Config.frame.radius
   startY: frame.innerTopEdge
 

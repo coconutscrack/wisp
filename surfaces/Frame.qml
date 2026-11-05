@@ -361,7 +361,7 @@ PanelWindow {
       interval: 2000
       running: false
       repeat: false
-      onTriggered: bottomPanel.open = false
+      onTriggered: bottomPanel.openByChange = false
     }
 
     WorkspaceRow {

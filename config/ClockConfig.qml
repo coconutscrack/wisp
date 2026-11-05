@@ -3,5 +3,5 @@ import QtQuick
 
 QtObject {
   property bool showSeconds: true
-  property int fontSize: 16
+  property int fontSize: 18
 }

@@ -10,7 +10,10 @@ import qs.services
 PanelWindow {
   id: root
 
-  property bool hasOpenPanel: topPanel.open || bottomPanel.open || rightPanel.open
+  readonly property bool hasOpenPanel: topPanel.open || bottomPanel.open || rightPanel.open
+  readonly property FramePanel topPanel: topPanel
+  readonly property FramePanel bottomPanel: bottomPanel
+  readonly property FramePanel rightPanel: rightPanel
 
   anchors {
     top: true
@@ -43,9 +46,11 @@ PanelWindow {
     anchors.fill: parent
 
     preferredRendererType: Shape.CurveRenderer
+
     FrameInnerEdge {
       outerWidth: root.width
       outerHeight: root.height
+
       topPanel: topPanel
       bottomPanel: bottomPanel
       rightPanel: rightPanel

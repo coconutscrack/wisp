@@ -1,11 +1,14 @@
 import QtQuick
+import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
 import qs.config
+import qs.components
 import qs.services
 
 PanelWindow {
   id: root
+
   anchors {
     top: true
     bottom : true
@@ -15,6 +18,10 @@ PanelWindow {
 
   mask: Region {
     item: overlay
+    Region {
+      item: rightPanel
+      intersection: Intersection.Subtract
+    }
   }
   WlrLayershell.layer: WlrLayer.Top
   WlrLayershell.namespace: "wisp-overlay"
@@ -34,6 +41,5 @@ PanelWindow {
       left: parent.left
       right: parent.right
     }
-
   }
 }

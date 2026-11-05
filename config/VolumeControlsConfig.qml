@@ -2,5 +2,6 @@ import Quickshell
 import QtQuick
 
 QtObject {
-  property int size: 26
+  property int width: 30
+  property int height: 250
 }

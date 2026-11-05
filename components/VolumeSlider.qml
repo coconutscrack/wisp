@@ -35,8 +35,8 @@ Slider {
   background: Rectangle {
     x: control.leftPadding
     y: control.topPadding + control.availableHeight / 2 - height / 2
-    implicitWidth: 26
-    implicitHeight: 200
+    implicitWidth: Config.volumeControls.width
+    implicitHeight: Config.volumeControls.height
     width: implicitWidth
     height: control.availableHeight
     radius: width / 2

@@ -11,9 +11,9 @@ PanelWindow {
   id: root
 
   readonly property bool hasOpenPanel: topPanel.open || bottomPanel.open || rightPanel.open
-  readonly property FramePanel topPanel: topPanel
-  readonly property FramePanel bottomPanel: bottomPanel
-  readonly property FramePanel rightPanel: rightPanel
+  // readonly property FramePanel topPanel: topPanel
+  // readonly property FramePanel bottomPanel: bottomPanel
+  // readonly property FramePanel rightPanel: rightPanel
 
   anchors {
     top: true

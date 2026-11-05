@@ -9,6 +9,10 @@ import qs.services
 PanelWindow {
   id: root
 
+  // required property FramePanel topPanel
+  // required property FramePanel bottomPanel
+  // required property FramePanel rightPanel
+  //
   anchors {
     top: true
     bottom : true
@@ -18,12 +22,12 @@ PanelWindow {
 
   mask: Region {
     item: overlay
-    Region {
-      item: rightPanel
-      intersection: Intersection.Subtract
-    }
+    // Region {
+    //   item: rightPanel
+    //   intersection: Intersection.Subtract
+    // }
   }
-  WlrLayershell.layer: WlrLayer.Top
+  // WlrLayershell.layer: WlrLayer.Top
   WlrLayershell.namespace: "wisp-overlay"
 
   color: "transparent"
@@ -32,8 +36,8 @@ PanelWindow {
   Rectangle {
     id: overlay
 
-    visible: OverlayStatus.open
-    color: Qt.alpha(Colors.background, 0.5)
+    // visible: OverlayStatus.open
+    color: Qt.alpha(Colors.background, Colors.overlayAlpha)
 
     anchors {
       top: parent.top

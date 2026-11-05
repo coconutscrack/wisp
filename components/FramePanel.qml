@@ -1,19 +1,23 @@
 import QtQuick
+import qs.services
 import qs.config
 
 Item {
   id: panel
+
+  readonly property bool hovered: hoverHandler.hovered
+
   required property string direction
   property bool horizontal: direction == "top" || direction == "bottom"
 
   required property real openWidth
   required property real openHeight
   property bool openByChange: false
-  property bool openByOverlay: false
-  readonly property bool open: openByChange || !openByOverlay
+  property bool openByOverlay: OverlayStatus.open
+  readonly property bool open: openByChange || openByOverlay
 
-  property real contentWidth: openByChange || openByOverlay ? openWidth : 0
-  property real contentHeight: openByChange || openByOverlay ? openHeight : 0
+  property real contentWidth: open ? openWidth : 0
+  property real contentHeight: open ? openHeight : 0
   property real padding: bumpRadius
   property real bumpHeight: { 
     if (panel.horizontal) {
@@ -58,5 +62,10 @@ Item {
       easing.type: Config.anims.framePanelCurve
       duration: Config.anims.framePanelDuration
     }
+  }
+
+  HoverHandler {
+    id: hoverHandler
+    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
   }
 }

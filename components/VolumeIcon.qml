@@ -13,6 +13,7 @@ Button {
   required property int fontSize
 
   contentItem: Text {
+    id: icon
     text: {
       if (Audio.muted) {
         return ""
@@ -29,15 +30,28 @@ Button {
 
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
+
     font.family: Fonts.icon
-    color: Colors.text
     font.pixelSize: root.fontSize
+
+    color: Audio.muted ? Colors.critical : Colors.text
+    Behavior on color {
+      ColorAnimation {
+        easing.type: Config.anims.colorCurve
+        duration: Config.anims.colorDuration
+      }
+    }
   }
 
   onClicked: Audio.toggleMuted()
 
   background: Rectangle {
-    radius: height / 2
-    color: hovered ? Colors.textMuted : "#00000000"
+    color: "transparent"
+  }
+
+  HoverHandler {
+    id: hoverHandler
+    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+    cursorShape: Qt.PointingHandCursor
   }
 }

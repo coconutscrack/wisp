@@ -18,6 +18,12 @@ Slider {
     Audio.setVolume(value)
   }
 
+  HoverHandler {
+    id: hoverHandler
+    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+    cursorShape: control.pressed ? Qt.ClosedHandCursor : Qt.PointingHandCursor
+  }
+
   Behavior on fillProgress {
     enabled: !control.pressed
     NumberAnimation { 

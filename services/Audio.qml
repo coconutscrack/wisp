@@ -6,6 +6,26 @@ import QtQuick
 import Quickshell.Services.Pipewire
 
 Singleton {
+  signal volumeKeyPressed()
+  GlobalShortcut {
+    name: "raise-volume"
+    onPressed: {
+      volumeKeyPressed()
+    }
+  }
+  GlobalShortcut {
+    name: "lower-volume"
+    onPressed: {
+      volumeKeyPressed()
+    }
+  }
+  GlobalShortcut {
+    name: "mute"
+    onPressed: {
+      volumeKeyPressed()
+    }
+  }
+
   PwObjectTracker {
     objects: [ Pipewire.defaultAudioSink ]
   }

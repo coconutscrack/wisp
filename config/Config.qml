@@ -10,4 +10,5 @@ Singleton {
   readonly property ClockConfig clock: ClockConfig {}
   readonly property VolumeControlsConfig volumeControls: VolumeControlsConfig {}
   readonly property BrightnessControlsConfig brightnessControls: BrightnessControlsConfig {}
+  readonly property CardConfig card: CardConfig {}
 }

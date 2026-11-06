@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import qs.config
+import qs.components
 
 PanelWindow {
   id: root
@@ -32,6 +33,11 @@ PanelWindow {
       bottom: parent.bottom
       left: parent.left
       right: parent.right
+    }
+
+    WifiCard {
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.verticalCenter: parent.verticalCenter
     }
   }
 }

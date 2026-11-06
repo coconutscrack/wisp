@@ -38,6 +38,12 @@ Scope {
         visible: monitor.name === focusedScreen?.name && OverlayStatus.open
         WlrLayershell.layer: WlrLayer.Overlay
         screen: modelData
+        Connections {
+          target: FocusedWorkspace
+          function onWsIdChanged() {
+            OverlayStatus.open = false
+          }
+        }
       }
 
       Frame {

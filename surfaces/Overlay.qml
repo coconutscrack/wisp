@@ -7,6 +7,7 @@ import qs.components
 PanelWindow {
   id: root
 
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
   anchors {
     top: true
     bottom : true
@@ -36,6 +37,10 @@ PanelWindow {
     }
 
     WifiCard {
+      focus: true
+      Keys.onSpacePressed: {
+          quickAction()
+      }
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.verticalCenter: parent.verticalCenter
     }

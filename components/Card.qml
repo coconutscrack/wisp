@@ -4,6 +4,7 @@ import QtQuick.Effects
 import qs.config
 
 Rectangle {
+  property var quickAction
   radius: Config.card.outerRadius
   width: 200
   height: 200

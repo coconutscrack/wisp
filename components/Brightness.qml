@@ -10,7 +10,7 @@ Column {
     anchors.horizontalCenter: parent.horizontalCenter
     height: slider.width
     width: slider.width
-    fontSize: slider.width * 1.5
+    fontSize: slider.width
   }
 
   BrightnessSlider {

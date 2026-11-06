@@ -3,9 +3,6 @@ import QtQuick
 import qs.services
 import qs.config
 
-// remove later and move focus to carousel
-import Quickshell.Wayland
-
 Card {
   quickAction: function() {
     Wifi.toggle()
@@ -39,6 +36,7 @@ Card {
           return "󰤭"
         }
       }
+      color: Colors.text
       font.family: Fonts.icon
       font.pixelSize: 36
       font.bold: false
@@ -53,6 +51,7 @@ Card {
       anchors.horizontalCenter: parent.horizontalCenter
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
+      color: Colors.text
     }
     Text {
       text: {
@@ -68,6 +67,7 @@ Card {
           return "Off"
         }
       }
+      color: Colors.text
       font.family: Fonts.text
       font.pixelSize: 12
       anchors.horizontalCenter: parent.horizontalCenter

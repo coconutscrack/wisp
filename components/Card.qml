@@ -17,4 +17,5 @@ Rectangle {
     shadowEnabled: true
     shadowBlur: 1.0
   }
+  color: Colors.background
 }

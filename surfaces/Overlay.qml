@@ -52,20 +52,5 @@ PanelWindow {
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.verticalCenter: parent.verticalCenter
     }
-    // Item {
-    //   Loader { 
-    //     id: widgetLoader
-    //     source: "WifiCard.qml"
-    //   }
-    //   focus: true
-    //   Keys.onSpacePressed: {
-    //     if (hasQuickAction) quickAction()
-    //   }
-    //   Keys.onEnterPressed: {
-    //     widgetLoader.source = "WifiExpanded.qml"
-    //   }
-    //   anchors.horizontalCenter: parent.horizontalCenter
-    //   anchors.verticalCenter: parent.verticalCenter
-    // }
   }
 }

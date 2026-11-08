@@ -34,7 +34,7 @@ PanelWindow {
   exclusionMode: ExclusionMode.Ignore
 
   Shape {
-    layer.samples: 4
+    preferredRendererType: Shape.CurveRenderer
     layer.enabled: true
     layer.effect: MultiEffect {
       autoPaddingEnabled: false

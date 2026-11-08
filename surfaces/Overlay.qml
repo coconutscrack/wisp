@@ -39,7 +39,7 @@ PanelWindow {
     WifiCard {
       focus: true
       Keys.onSpacePressed: {
-        if (WifiCard.hasQuickAction) quickAction()
+        if (hasQuickAction) quickAction()
       }
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.verticalCenter: parent.verticalCenter

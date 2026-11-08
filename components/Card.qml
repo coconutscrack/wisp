@@ -5,6 +5,7 @@ import qs.config
 
 Rectangle {
   property var quickAction
+  readonly property bool hasQuickAction: typeof quickAction == 'function'
   radius: Config.card.outerRadius
   width: 200
   height: 200

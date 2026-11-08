@@ -36,13 +36,36 @@ PanelWindow {
       right: parent.right
     }
 
+
     WifiCard {
+      id: wifiCard
       focus: true
       Keys.onSpacePressed: {
         if (hasQuickAction) quickAction()
       }
+      Keys.onReturnPressed: {
+        wifiCard.expanded = true
+      }
+      Keys.onEscapePressed: {
+        wifiCard.expanded = false
+      }
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.verticalCenter: parent.verticalCenter
     }
+    // Item {
+    //   Loader { 
+    //     id: widgetLoader
+    //     source: "WifiCard.qml"
+    //   }
+    //   focus: true
+    //   Keys.onSpacePressed: {
+    //     if (hasQuickAction) quickAction()
+    //   }
+    //   Keys.onEnterPressed: {
+    //     widgetLoader.source = "WifiExpanded.qml"
+    //   }
+    //   anchors.horizontalCenter: parent.horizontalCenter
+    //   anchors.verticalCenter: parent.verticalCenter
+    // }
   }
 }

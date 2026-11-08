@@ -12,4 +12,6 @@ QtObject {
   property int colorDuration: 100
   property int sliderCurve: Easing.Linear
   property int sliderDuration: 150
+  property int cardStateCurve: Easing.Linear
+  property int cardStateDuration: 150
 }

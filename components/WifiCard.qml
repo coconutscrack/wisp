@@ -16,10 +16,15 @@ Card {
     spacing: 6
     Text {
       text: {
-        if (Wifi.device == null || !Wifi.hardwareEnabled) {
-          return "󰤫"
-        } else if (Wifi.enabled) {
-          if (Wifi.connectedNetwork != null) {
+        switch (Wifi.displayStatus) {
+          case Wifi.Status.HardwareDisabled:
+          case Wifi.Status.NoDevice:
+            return "󰤫"
+          case Wifi.Status.Off:
+            return "󰤭"
+          case Wifi.Status.NotConnected:
+            return "󰤯"
+          case Wifi.Status.Connected:
             if (Wifi.connectedNetwork.signalStrength < 1/4) {
               return "󰤟"
             } else if (Wifi.connectedNetwork.signalStrength < 2/4) {
@@ -29,11 +34,6 @@ Card {
             } else {
               return "󰤨"
             }
-          } else {
-            return "󰤯"
-          }
-        } else if (!Wifi.enabled) {
-          return "󰤭"
         }
       }
       color: Colors.text
@@ -55,16 +55,17 @@ Card {
     }
     Text {
       text: {
-        if (Wifi.device == null) return "No device found"
-        if (!Wifi.hardwareEnabled) {
-          return "Hardware disabled"
-        } else if (Wifi.enabled) {
-          if (Wifi.connectedNetwork != null) {
+        switch (Wifi.displayStatus) {
+          case Wifi.Status.HardwareDisabled:
+            return "Hardware disabled"
+          case Wifi.Status.NoDevice:
+            return "No device found"
+          case Wifi.Status.Off:
+            return "Off"
+          case Wifi.Status.NotConnected:
+            return "Not connected"
+          case Wifi.Status.Connected:
             return Wifi.connectedNetwork.name
-          }
-          return "Not connected"
-        } else if (!Wifi.enabled) {
-          return "Off"
         }
       }
       color: Colors.text

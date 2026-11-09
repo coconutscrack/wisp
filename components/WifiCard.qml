@@ -7,7 +7,7 @@ Card {
   neutralComponent: wifiNeutral
   expandedComponent: wifiExpanded
   quickAction: function() {
-    Wifi.toggle()
+    if (!expanded) Wifi.toggle()
   }
   border.width: 2
   border.color: Wifi.enabled ? Colors.border : "transparent"

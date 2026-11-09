@@ -99,19 +99,38 @@ ListView {
     }
     TextInput {
       id: pskInput
+
       visible: modelData == listView.pskNetwork
       onVisibleChanged: {
         if (visible) forceActiveFocus()
       }
+
       x: signalStrengthIcon.width
-      echoMode: TextInput.Password
       width: listView.width * (2/3)
-      color: Colors.text
-      font.family: Fonts.icon
-      font.pixelSize: 14
       verticalAlignment: Text.AlignVCenter
       anchors.verticalCenter: parent.verticalCenter
       leftPadding: listView.padding
+
+      echoMode: TextInput.Password
+      passwordCharacter: "*"
+
+      color: Colors.text
+      font.family: Fonts.text
+      font.pixelSize: 14
+
+      function closeInputBox() {
+        clear()
+        listView.pskNetwork = undefined
+        focus = false
+        listView.forceActiveFocus()
+      }
+      Keys.onReturnPressed: {
+        modelData.connectWithPsk(text)
+        closeInputBox()
+      }
+      Keys.onEscapePressed: {
+        closeInputBox()
+      }
     }
     Text {
       id: networkInfoIcons

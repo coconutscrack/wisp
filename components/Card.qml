@@ -10,15 +10,15 @@ Rectangle {
   readonly property bool hasQuickAction: typeof quickAction == 'function'
   property var quickAction
   property bool expanded
-  property real expandedWidth
-  property real expandedHeight
   radius: Config.card.outerRadius
   Loader {
+    id: loader
     anchors.centerIn: parent
     sourceComponent: expanded ? expandedComponent : neutralComponent
   }
-  width: 200
-  height: 200
+  anchors.verticalCenter: parent.verticalCenter
+  width: expanded ? loader.width : Config.card.size
+  height: expanded ? loader.height : Config.card.size
   layer.samples: 4
   layer.enabled: true
   layer.effect: MultiEffect {

@@ -4,6 +4,8 @@ import qs.services
 import qs.config
 
 Column {
+  width: Config.card.wifiExpandedWidth
+  height: Config.card.wifiExpandedHeight
   spacing: 6
   Text {
     text: {

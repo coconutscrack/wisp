@@ -3,9 +3,16 @@ import Quickshell
 import Quickshell.Wayland
 import qs.config
 import qs.components
+import qs.services
 
 PanelWindow {
   id: root
+
+  onVisibleChanged: {
+    if (!visible) {
+      carousel.focusedCard.expanded = false
+    }
+  }
 
   WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
   anchors {
@@ -36,22 +43,33 @@ PanelWindow {
       right: parent.right
     }
 
-
-    WifiCard {
-      id: wifiCard
-      focus: true
-      Keys.onSpacePressed: {
-        if (hasQuickAction) quickAction()
+    Keys.onPressed: function(event) {
+      switch (event.key) {
+        case Qt.Key_H:
+          carousel.moveFocusTo(carousel.focusedIdx - 1)
+          break
+        case Qt.Key_L:
+          carousel.moveFocusTo(carousel.focusedIdx + 1)
+          break
+        case Qt.Key_Space:
+          if (carousel.focusedCard.hasQuickAction) carousel.focusedCard.quickAction()
+          break
+        case Qt.Key_Return:
+          carousel.focusedCard.expanded = true
+          break
+        case Qt.Key_Escape:
+          if (carousel.focusedCard.expanded == true) {
+            carousel.focusedCard.expanded = false
+          } else {
+            OverlayStatus.open = false
+          }
+          break
       }
-      Keys.onReturnPressed: {
-        wifiCard.expanded = true
-      }
-      Keys.onEscapePressed: {
-        wifiCard.expanded = false
-      }
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.verticalCenter: parent.verticalCenter
     }
-    BluetoothCard {}
+
+    Carousel { 
+      id: carousel 
+      focus: true
+    }
   }
 }

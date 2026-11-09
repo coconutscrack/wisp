@@ -15,7 +15,6 @@ Singleton {
     }
     return Wifi.Status.Off
   }
-
   readonly property var allDevices: Networking.devices
   readonly property var device: { 
     for (let deviceObject of allDevices.values) {
@@ -35,4 +34,12 @@ Singleton {
   }
 
   function toggle() { Networking.wifiEnabled = !Networking.wifiEnabled }
+  function scan() { 
+    if (device == undefined) return
+    device.scannerEnabled = true 
+  }
+  function stopScan() { 
+    if (device == undefined) return
+    device.scannerEnabled = false 
+  }
 }

@@ -28,7 +28,7 @@ Rectangle {
     shadowEnabled: true
     shadowBlur: 1.0
   }
-  color: Colors.background
+  color: Colors.surface
   Behavior on width {
     NumberAnimation { 
       easing.type: Config.anims.cardStateCurve

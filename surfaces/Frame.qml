@@ -55,7 +55,7 @@ PanelWindow {
       leftPanel: leftPanel
       rightPanel: rightPanel
       
-      fillColor: Qt.alpha(Colors.background, Colors.alpha)
+      fillColor: Qt.alpha(Colors.surface, Colors.alpha)
 
       PathRectangle {
         width: root.width

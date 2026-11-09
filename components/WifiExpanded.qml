@@ -9,6 +9,7 @@ ListView {
 
   model: Wifi.scannedNetworks
   property real padding: Config.wifiCard.entryHeight / 2
+  property var pskNetwork
 
   clip: true
 
@@ -34,20 +35,31 @@ ListView {
         event.accepted = true
         break
       case Qt.Key_Return:
-        if (currentItem != null) {
-          if (!currentItem.modelData.connected)
-            currentItem.modelData.connect()
-          else {
-            currentItem.modelData.disconnect()
-          }
-        } 
         event.accepted = true
+        if (currentItem == null) {
+          break
+        }
+        if (currentItem.modelData.connected) {
+          currentItem.modelData.disconnect()
+          break
+        }
+        if (currentItem.connectable) {
+          currentItem.modelData.connect()
+          break
+        }
+        if (currentItem.requiresPsk) {
+          listView.pskNetwork = currentItem.modelData
+          break
+        }
         break
     }
   }
 
   delegate: Rectangle {
     required property var modelData
+    property bool requiresPsk: modelData.security == WifiSecurityType.WpaPsk || modelData.security == WifiSecurityType.Wpa2Psk
+    property bool connectable: modelData.known || modelData.security == WifiSecurityType.Open || modelData.security == WifiSecurityType.Owe
+
     radius: Config.card.outerRadius - Config.card.padding
     width: listView.width
     height: listView.height / Config.wifiCard.numNetworksShown
@@ -73,6 +85,7 @@ ListView {
     Text {
       id: networkName
       x: signalStrengthIcon.width
+      visible: !pskInput.visible
       text: modelData.name
       width: listView.width * (2/3)
       color: Colors.text
@@ -83,6 +96,22 @@ ListView {
       anchors.verticalCenter: parent.verticalCenter
       leftPadding: listView.padding
       elide: Text.ElideRight
+    }
+    TextInput {
+      id: pskInput
+      visible: modelData == listView.pskNetwork
+      onVisibleChanged: {
+        if (visible) forceActiveFocus()
+      }
+      x: signalStrengthIcon.width
+      echoMode: TextInput.Password
+      width: listView.width * (2/3)
+      color: Colors.text
+      font.family: Fonts.icon
+      font.pixelSize: 14
+      verticalAlignment: Text.AlignVCenter
+      anchors.verticalCenter: parent.verticalCenter
+      leftPadding: listView.padding
     }
     Text {
       id: networkInfoIcons

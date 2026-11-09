@@ -17,8 +17,8 @@ Rectangle {
     sourceComponent: expanded ? expandedComponent : neutralComponent
   }
   anchors.verticalCenter: parent.verticalCenter
-  width: expanded ? loader.width : Config.card.size
-  height: expanded ? loader.height : Config.card.size
+  width: expanded ? loader.width + Config.card.padding * 2 : Config.card.size
+  height: expanded ? loader.height + Config.card.padding * 2 : Config.card.size
   layer.samples: 4
   layer.enabled: true
   layer.effect: MultiEffect {

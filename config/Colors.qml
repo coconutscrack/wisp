@@ -6,6 +6,7 @@ import QtQuick
 Singleton {
   property color background:    "#F5EFE4"
   property color surface:       "#EADFCC"
+  property color selected:      "#BAB1A0"
   property color border:        "#D3C3AA"
   property color textMuted:     Qt.alpha(text, 0.5)
   property color text:          "#4A3E33"

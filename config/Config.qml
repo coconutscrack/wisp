@@ -12,4 +12,5 @@ Singleton {
   readonly property BrightnessControlsConfig brightnessControls: BrightnessControlsConfig {}
   readonly property CardConfig card: CardConfig {}
   readonly property WifiCardConfig wifiCard: WifiCardConfig {}
+  readonly property BluetoothCardConfig bluetoothCard: BluetoothCardConfig {}
 }

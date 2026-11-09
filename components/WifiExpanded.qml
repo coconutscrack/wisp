@@ -14,7 +14,7 @@ ListView {
   clip: true
 
   spacing: 0
-  width: Config.card.wifiExpandedWidth
+  width: Config.wifiCard.expandedWidth
   height: (Config.wifiCard.numNetworksShown * Config.wifiCard.entryHeight)
 
   Component.onCompleted: {
@@ -36,9 +36,7 @@ ListView {
         break
       case Qt.Key_Return:
         event.accepted = true
-        if (currentItem == null) {
-          break
-        }
+        if (currentItem == null) break
         if (currentItem.modelData.connected) {
           currentItem.modelData.disconnect()
           break
@@ -63,7 +61,14 @@ ListView {
     radius: Config.card.outerRadius - Config.card.padding
     width: listView.width
     height: listView.height / Config.wifiCard.numNetworksShown
-    color: ListView.isCurrentItem ? Colors.border : "transparent"
+    color: {
+      if (ListView.isCurrentItem) {
+        if (pskInput.visible) return Colors.background
+        return Colors.border
+      } else {
+        return "transparent"
+      }
+    }
     Text {
       id: signalStrengthIcon
       text: {

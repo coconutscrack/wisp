@@ -19,6 +19,12 @@ Singleton {
     return discoveredDevices?.values.filter(device => device.connected) ?? []
   }
 
+  function scan() {
+    if (adapter) adapter.discovering = true
+  }
+  function stopScan() {
+    if (adapter) adapter.discovering = false
+  }
   function toggle() {
     if (adapter) adapter.enabled = !adapter.enabled
   }

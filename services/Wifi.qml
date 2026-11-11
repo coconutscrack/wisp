@@ -6,6 +6,7 @@ import Quickshell.Networking
 
 Singleton {
   enum Status { NoDevice, Connected, NotConnected, Off, HardwareDisabled }
+  readonly property bool isScanning: device ? device.scannerEnabled : false
   readonly property int displayStatus: {
     if (Wifi.device == null) return Wifi.Status.NoDevice
     if (!Wifi.hardwareEnabled) return Wifi.Status.HardwareDisabled

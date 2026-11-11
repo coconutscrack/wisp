@@ -12,6 +12,7 @@ Singleton {
     if (connectedDevices.length != 0) return BluetoothService.Status.Connected
     return adapter.state == BluetoothAdapterState.Enabled ? BluetoothService.Status.NotConnected : BluetoothService.Status.Off
   }
+  readonly property bool isScanning: adapter?.discovering
   readonly property bool enabled: adapter?.enabled
   readonly property var adapter: Bluetooth.defaultAdapter
   readonly property var discoveredDevices: adapter?.devices

@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import qs.config
-import qs.components
+import qs.components.overlay
 import qs.services
 
 PanelWindow {

@@ -4,7 +4,7 @@ import QtQuick.Shapes
 import QtQuick.Effects
 import Quickshell.Wayland
 import qs.config
-import qs.components
+import qs.components.frame
 import qs.services
 
 PanelWindow {

@@ -112,7 +112,7 @@ ListView {
       radius: Config.card.outerRadius - Config.card.padding
       width: listView.width
       height: listView.height / Config.bluetoothCard.numDevicesShown
-      color: ListView.isCurrentItem ? Colors.border : "transparent"
+      color: itemWrapper.ListView.isCurrentItem ? Colors.border : "transparent"
       Text {
         id: deviceIcon
         text: {

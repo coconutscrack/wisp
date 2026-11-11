@@ -7,7 +7,31 @@ import qs.config
 ListView {
   id: listView
 
-  model: Wifi.scannedNetworks
+  model: ScriptModel {
+    values: {
+      if (Wifi.scannedNetworks == undefined) return undefined
+      return [... Wifi.scannedNetworks.values].sort(sectionizeNetworks)
+    }
+  }
+
+  function sectionizeNetworks(a, b) {
+    return compareNetworkRank(a, b) ? compareNetworkRank(a, b) : compareSignalStrength(a, b)
+  }
+
+  function compareSignalStrength(a, b) {
+    return b.signalStrength - a.signalStrength
+  }
+
+  function compareNetworkRank(a, b) {
+    return networkRank(a) - networkRank(b)
+  }
+
+  function networkRank(nw) {
+    if (nw.connected) return 1
+    if (nw.known) return 2
+    return 3
+  }
+
   property real padding: Config.wifiCard.entryHeight / 2
   property var pskNetwork
 
@@ -50,6 +74,15 @@ ListView {
           break
         }
         break
+    }
+  }
+  section.property: "modelData.known"
+  section.delegate: sectionHeader
+
+  Component {
+    id: sectionHeader
+    Text {
+      text: section
     }
   }
 
@@ -160,26 +193,5 @@ ListView {
         }
       }
     }
-    // Text {
-    //   id: connectionStateIcon
-    //   x: listView.width - connectionStateIcon.width - securityIcon.width
-    //   text: {
-    //     if (modelData.state == ConnectionState.Connected) return "󰄬"
-    //     if (modelData.state == ConnectionState.Connecting) return "󰇘"
-    //     return " "
-    //   }
-    //   opacity: modelData.state == ConnectionState.Connected || modelData.state == ConnectionState.Connecting
-    //   color: Colors.text
-    //   font.family: Fonts.icon
-    //   font.pixelSize: 14
-    //   anchors.verticalCenter: parent.verticalCenter
-    //   rightPadding: listView.padding
-    //   Behavior on opacity {
-    //     NumberAnimation { 
-    //       easing.type: Config.anims.fadeCurve
-    //       duration: Config.anims.fadeDuration
-    //     }
-    //   }
-    // }
   }
 }

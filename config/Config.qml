@@ -13,4 +13,5 @@ Singleton {
   readonly property CardConfig card: CardConfig {}
   readonly property WifiCardConfig wifiCard: WifiCardConfig {}
   readonly property BluetoothCardConfig bluetoothCard: BluetoothCardConfig {}
+  readonly property PowerCardConfig powerCard: PowerCardConfig {}
 }

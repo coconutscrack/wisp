@@ -6,7 +6,7 @@ Row {
   property int focusedIdx: 0
   property real focusedIdxForAnim: focusedIdx
   property int count: widgets.length
-  readonly property list<Card> widgets: [ wifiCard, bluetoothCard ]
+  readonly property list<Card> widgets: [ wifiCard, bluetoothCard, powerCard ]
   readonly property Card focusedCard: widgets[focusedIdx]
   function moveFocusTo(cardNum) {
     if (focusedCard.expanded) return
@@ -27,4 +27,5 @@ Row {
 
   WifiCard { id: wifiCard }
   BluetoothCard { id: bluetoothCard }
+  PowerCard { id: powerCard }
 }

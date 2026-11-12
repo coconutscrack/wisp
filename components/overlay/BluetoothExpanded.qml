@@ -51,7 +51,7 @@ ListView {
     return compareDeviceRank(a, b) ? compareDeviceRank(a, b) : compareDeviceName(a, b)
   }
   function compareDeviceName(a, b) {
-    return a.localeCompare(b)
+    return a.name.localeCompare(b.name)
   }
   function compareDeviceRank(a, b) {
     return deviceRank(a) - deviceRank(b)

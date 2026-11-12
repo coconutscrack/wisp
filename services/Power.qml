@@ -36,7 +36,7 @@ Singleton {
   Process {
     id: logoutCmd
     running: false
-    command: [ "exit" ]
+    command: [ "hyprctl", "dispatch", "hl.dsp.exit()" ]
   }
   Process {
     id: rebootCmd

@@ -213,35 +213,11 @@ ListView {
         }
         font.family: Fonts.text
         font.pixelSize: 14
-        // font.bold: modelData.state == ConnectionState.Connected
         verticalAlignment: Text.AlignVCenter
         anchors.verticalCenter: parent.verticalCenter
         leftPadding: listView.padding
         elide: Text.ElideRight
       }
-      // Text {
-      //   id: networkInfoIcons
-      //   text: {
-      //     let iconString = "";
-      //     if (modelData.state == ConnectionState.Connected) iconString += "󰄬  "
-      //     if (modelData.state == ConnectionState.Connecting) iconString += "󰇘  "
-      //     if (modelData.security != WifiSecurityType.Open) iconString += "󰌾  "
-      //     return iconString.trim()
-      //   }
-      //   color: Colors.text
-      //   font.family: Fonts.icon
-      //   font.pixelSize: 14
-      //   verticalAlignment: Text.AlignVCenter
-      //   anchors.right: parent.right
-      //   anchors.verticalCenter: parent.verticalCenter
-      //   rightPadding: listView.padding
-      //   Behavior on opacity {
-      //     NumberAnimation { 
-      //       easing.type: Config.anims.fadeCurve
-      //       duration: Config.anims.fadeDuration
-      //     }
-      //   }
-      // }
     }
   }
 }

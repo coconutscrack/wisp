@@ -1,5 +1,4 @@
 import Quickshell
-import Quickshell.Bluetooth
 import QtQuick
 import qs.services
 import qs.config

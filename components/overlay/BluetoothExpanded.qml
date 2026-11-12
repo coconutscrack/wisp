@@ -41,8 +41,24 @@ ListView {
         break
       case Qt.Key_Return:
         event.accepted = true
-        if (currentItem == null) break
-        currentItem.modelData.connected = !currentItem.modelData.connected
+        if (currentItem == null) return
+        if (currentItem.modelData.pairing) {
+          currentItem.modelData.cancelPair()
+          return
+        }
+        if (currentItem.modelData.paired) {
+          currentItem.modelData.connected = !currentItem.modelData.connected
+        } else {
+          currentItem.modelData.pair()
+        }
+        break
+      case Qt.Key_X:
+        event.accepted = true
+        if (currentItem == null) return
+        if (currentItem.modelData.paired) {
+          currentItem.modelData.forget()
+          return
+        }
         break
     }
   }
@@ -70,6 +86,12 @@ ListView {
 
     width: listView.width
 
+    Connections {
+      target: modelData
+      function onPairedChanged() { 
+        if (modelData.paired) modelData.connect()
+      }
+    }
     Rectangle {
       visible: index == 0 || compareDeviceRank(sModel.values[index - 1], modelData)
       width: listView.width

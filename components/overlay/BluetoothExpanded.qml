@@ -115,6 +115,7 @@ ListView {
       color: itemWrapper.ListView.isCurrentItem ? Colors.border : "transparent"
       Text {
         id: deviceIcon
+        width: listView.width / 10
         text: {
           switch (modelData.icon) {
             case "audio-headset":

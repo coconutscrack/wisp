@@ -11,9 +11,11 @@ QtObject {
   property int fadeCurve: Easing.InOutQuad
   property int fadeDuration: 150
   property int colorCurve: Easing.Linear
-  property int colorDuration: 100
+  property int colorDuration: 50
   property int sliderCurve: Easing.Linear
   property int sliderDuration: 150
   property int cardStateCurve: Easing.OutCubic
   property int cardStateDuration: 150
+  property int powerConfCurve: Easing.Linear
+  property int powerConfDuration: 100
 }

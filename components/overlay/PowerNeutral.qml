@@ -29,6 +29,7 @@ Column {
       let s = "up"
       if (Time.uptimeHours) s += ` ${Time.uptimeHours}h`
       s += ` ${Time.uptimeMinutes}m`
+      s += ` ${Time.uptimeSeconds}s`
       return s
     }
     color: Colors.text

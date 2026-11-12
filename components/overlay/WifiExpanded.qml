@@ -140,6 +140,7 @@ ListView {
       }
       Text {
         id: signalStrengthIcon
+        width: listView.width / 10
         text: {
           let icon = "󰢾"
           if (modelData.signalStrength < 1/3) {

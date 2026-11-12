@@ -10,6 +10,7 @@ Singleton {
   readonly property real uptime: bootMoment ? (date - bootMoment) : 0
   readonly property real uptimeHours: { Math.floor(((uptime / 1000) / 60) / 60) }
   readonly property real uptimeMinutes: { Math.floor(((uptime - (uptimeHours * (1000 * 60 * 60))) / 1000) / 60) }
+  readonly property real uptimeSeconds: { Math.floor(((uptime - (uptimeHours * (1000 * 60 * 60))) / 1000) - (uptimeMinutes * 1000 * 60) / 1000) }
 
   SystemClock {
     id: clock

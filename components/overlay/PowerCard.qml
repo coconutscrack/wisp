@@ -13,8 +13,8 @@ Card {
     id: powerNeutral
     PowerNeutral {}
   }
-  // Component {
-  //   id: powerExpanded
-  //   PowerExpanded {}
-  // }
+  Component {
+    id: powerExpanded
+    PowerExpanded {}
+  }
 }
